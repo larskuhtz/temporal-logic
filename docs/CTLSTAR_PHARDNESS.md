@@ -36,7 +36,7 @@ The mathematical core of the CTL* reduction is in `RequestProject/MCVP/Construct
   the subtree of `u`.
 * After pushing negations inward (E/A, U/R duality), the evaluation circuit is **monotone**. So
   Goldschlager-style crossovers built from negation (planar CVP with NOT is P-complete,
-  Goldschlager 1977, see `REFERENCES.md` [Gol77]) are not
+  Goldschlager [Gol77]) are not
   available. Non-planarity has to come from the E/A quantifiers.
 * Nesting depth and tree height both have to be large, because:
   * for bounded or polylogarithmic E-nesting depth, the problem is in NC: each nesting level is
@@ -170,7 +170,8 @@ exactly `redFun w`, for **every** word `w` (valid or not).
 
 ## 5. Step (c): logspace reductions compose (verified)
 
-`RequestProject/Logspace/Compose.lean` proves, for the Turing machines of `Complexity.lean`:
+That logspace computable functions compose is classical [Jon75]; see also [Pap94] and [AB09].
+`RequestProject/Logspace/Compose.lean` proves it for the Turing machines of `Complexity.lean`:
 
 * `LogspaceComputable.comp : LogspaceComputable f → LogspaceComputable g →
   LogspaceComputable (g ∘ f)`;
@@ -200,8 +201,9 @@ How it is proved:
 
 ## 6. Step (a): MCVP is P-hard (verified)
 
-`RequestProject/PHard/Main.lean` proves `MCVP_PHard : PHard MCVP` for the Turing machines of
-`Complexity.lean` and the encoding `encodeCircuit`.
+Ladner [Lad75] showed that CVP is P-complete, using a tableau construction, and Goldschlager
+[Gol77] showed the same for MCVP; see also [GHR95]. `RequestProject/PHard/Main.lean` proves `MCVP_PHard : PHard MCVP` for
+the Turing machines of `Complexity.lean` and the encoding `encodeCircuit`.
 
 * `PHard/Tableau.lean`: for a machine `M` deciding a language in time `T = c (n+1)^c`, the
   *tableau circuit* `tabCircuit M c w`. A configuration is represented by boolean *entries*
@@ -306,8 +308,8 @@ P-complete as well, but that claim is not machine-checked.
 **What the topology has to provide (informal discussion, not formalised).**
 
 * *A path* gives LTL path checking: on a path, `E ψ ≡ ψ` at every node. Its best known upper
-  bound is `AC^1[LogDCFL] ⊆ NC` (Theorem 1a; proved in this project assuming the
-  Chakraborty–Datta theorem).
+  bound is `AC^1[LogDCFL] ⊆ NC` ([KF09, Theorem 2], [KF12, Theorem 1] for finite paths,
+  [Kuh10, Corollary 4] for lasso paths; Theorem 1a, proved in this project).
 * *Where the side leaf hangs is what matters, not how many leaves there are.* Suppose the single
   side leaf hangs at the root, or more generally at constant depth `d`. Every node below the
   branching node has only one path, so all state subformulas there are evaluated by LTL path
@@ -330,7 +332,7 @@ P-complete as well, but that claim is not machine-checked.
   at polylogarithmic depth, such as balanced binary trees and spiders branching only at the root,
   seem to stay "LTL-like". For branching depth `(log n)^k` this is Theorem 5 (see
   `docs/SHALLOW_BRANCHING.md`): such instances are in `AC^{k+1}[LogDCFL]`, assuming the
-  Chakraborty–Datta theorem.
+  Chakraborty–Datta theorem [CD06, Theorem 1].
 
 **Caveat.** I have not checked the literature for this result. The construction and proof are
 for the semantics formalised in this project. Please check that they match the intended

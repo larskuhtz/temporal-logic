@@ -8,24 +8,28 @@ Lean statements (in `RequestProject/Statements.lean`):
 * `CTLTreeChecking_mem_AC2_LogDCFL_of_OIF (h : OIFMCVP_in_LogDCFL) :
   CTLTreeChecking ∈ ACOracle 2 LogDCFL`. This is the round algorithm combined with Theorem 1a
   (`LTLPathChecking_mem_AC1_LogDCFL_of_OIF`) through `RoundDecidable.mem_ACOracle_LogDCFL`.
-* `CTLTreeChecking_mem_AC2_LogDCFL`: the unconditional form. It follows from the conditional
-  form and the Chakraborty–Datta theorem `OIFMCVP_mem_LogDCFL`, which is stated but not proved.
+* `CTLTreeChecking_mem_AC2_LogDCFL`: the unconditional form. It combines the round algorithm
+  with the unconditional Theorem 1a (`LTLPathChecking_mem_AC1_LogDCFL`), which rests on the
+  Barrington–Lu–Miltersen–Skyum theorem [BLMS99, Theorem 2], proved in `RequestProject/BLMS/`.
 
-The first two statements are proved without `sorry`. They use only the axioms `propext`,
+All three statements are proved without `sorry`. They use only the axioms `propext`,
 `Classical.choice` and `Quot.sound`.
 
 ## Relation to Kuhtz's proof
 
-[Kuh10, Theorem 10] proves the bound in three steps:
+[Kuh10, Theorem 10] proves the bound as follows (Section 5.2 of the thesis):
 
 1. The CTL expansion laws unroll the formula over the tree. The result is a circuit whose graph
    is a subgraph of the product of the formula tree and the computation tree.
 2. The computation tree is contracted in `O(log n)` parallel stages. This is an `AC¹`
    reduction to circuits that are subgraphs of the product of a *path* and the formula tree.
-3. The path case is handled by the machinery of LTL path checking: an `AC¹` reduction to
-   one-input-face circuits, which are evaluated in `LogDCFL`.
+3. The formula tree is then contracted as in LTL path checking. This is an `AC¹` reduction to
+   one-input-face circuits, which are evaluated in `LogDCFL` ([Kuh10, Corollary 1], based on
+   [CD06]).
 
-The formal proof has the same structure, with these changes.
+Before these steps, a logspace reduction makes the tree binary ([Kuh10, Lemma 12]).
+
+The formal proof is organised differently:
 
 * **Contraction.** The computation tree is not contracted by rake/compress operations. It is
   split into *chains* by halving sizes. A chain is a heavy-path style decomposition, described

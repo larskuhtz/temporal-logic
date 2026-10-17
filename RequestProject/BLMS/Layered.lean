@@ -6,7 +6,7 @@ public import Mathlib
 # Layered monotone planar circuits
 
 An abstract description of a stratified monotone planar circuit in standard (layered) form, in
-the style of [BLMS, Section 2].  Gates are natural numbers.  The gates of layer `l` are the
+the style of [BLMS99, Section 2].  Gates are natural numbers.  The gates of layer `l` are the
 numbers in `[bd l, bd (l + 1))`; layer `0` is the input layer.  A gate `i` of a layer `l ≥ 1` is
 an `AND` gate (`isAnd i = true`) or an `OR` gate with arguments `lo i ≤ hi i` (a `COPY` gate is a
 gate with `lo i = hi i`).  Planarity: if `i < i'` are gates of the same layer, then
@@ -16,7 +16,7 @@ gate with `lo i = hi i`).  Planarity: if `i < i'` are gates of the same layer, t
 `out S` says that some gate of the last layer `D` is true.
 
 We prove the basic facts about one evaluation step used in the analysis of the algorithm of
-[BLMS, Section 5]: monotonicity, the image of a convex set is convex, a gate whose arguments
+[BLMS99, Section 5]: monotonicity, the image of a convex set is convex, a gate whose arguments
 enclose a set kills it, and the right (left) end of the image of a convex set bounds the image of
 everything to its left (right).
 -/

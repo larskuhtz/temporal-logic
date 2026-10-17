@@ -107,8 +107,8 @@ pairing-function numbering of formulas would produce numbers with exponentially 
   queries of a round from the input and the previous answers, and the final decision function,
   are shown to be logspace computable.
 * **5b** `CTLStarShallowTreeChecking_mem_AC_LogDCFL`: if the one-input-face monotone planar
-  circuit value problem is in `LogDCFL` (`OIFMCVP_in_LogDCFL`, the Chakraborty–Datta theorem,
-  taken as a hypothesis), then `CTLStarShallowTreeChecking k ∈ AC^{k+1}[LogDCFL]`. The proof
+  circuit value problem is in `LogDCFL` (`OIFMCVP_in_LogDCFL`, the Chakraborty–Datta theorem
+  [CD06, Theorem 1], taken as a hypothesis), then `CTLStarShallowTreeChecking k ∈ AC^{k+1}[LogDCFL]`. The proof
   combines 5a with Theorem 1a (conditional form) by the generic step
   `RoundDecidable.mem_ACOracle_LogDCFL` (`RequestProject/ACRound/Main.lean`):
   `O(log^k n)` rounds of logspace work and queries to an `AC¹[LogDCFL]` language give
@@ -132,9 +132,10 @@ How the formal algorithm relates to §3:
 Special cases:
 
 * `k = 0` (all branching nodes at depth `< 1`, i.e. at most the root branches, e.g. spiders):
-  5b gives `AC¹[LogDCFL]`, the bound of LTL path checking.
+  5b gives `AC¹[LogDCFL]`, the bound of LTL path checking ([KF12, Theorem 1],
+  [Kuh10, Corollary 4]).
 * `k = 1` (branching depth `≤ ⌊log₂ n⌋`, e.g. balanced binary trees): 5b gives
-  `AC²[LogDCFL]`, the same bound as for CTL tree checking (Theorem 1b).
+  `AC²[LogDCFL]`, the same bound as for CTL tree checking (Theorem 1b, [Kuh10, Theorem 10]).
 
 So the claim "branching nodes at polylogarithmic depth ⇒ NC" is proved in Lean, under the
 hypothesis that the Chakraborty–Datta theorem holds.
@@ -156,6 +157,6 @@ hypothesis that the Chakraborty–Datta theorem holds.
 
 ## 5. What is not formalised
 
-* The Chakraborty–Datta theorem, which Theorem 5b takes as a hypothesis.
+* The Chakraborty–Datta theorem [CD06, Theorem 1], which Theorem 5b takes as a hypothesis.
 * The informal remarks of §4.2: the circuit bound for arbitrary `d`, and the comparison with
   the hardness results.

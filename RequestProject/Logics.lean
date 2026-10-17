@@ -32,7 +32,8 @@ Full entries are in `REFERENCES.md`.
 * The path checking problem: N. Markey, Ph. Schnoebelen, *Model checking a path*, CONCUR 2003
   [MS03]. Its parallel complexity: L. Kuhtz, B. Finkbeiner, ICALP 2009 [KF09] and LMCS 8(4:10),
   2012 [KF12], which also treats LTL with past and bounded operators. CTL tree checking:
-  L. Kuhtz, PhD thesis, Universität des Saarlandes, 2010 [Kuh10].
+  L. Kuhtz, PhD thesis, Universität des Saarlandes, 2010 [Kuh10]. The known lower bound for LTL
+  path checking is `NC¹` [DS02], the complexity of evaluating Boolean formulas [Bus87].
 
 [KF09] and [KF12] work with finite paths. Ultimately periodic paths, as used here, are treated
 in [Kuh10, Corollary 4]. We have not checked that the remaining choices made here (finite

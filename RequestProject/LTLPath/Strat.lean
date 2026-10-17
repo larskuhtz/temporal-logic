@@ -6,10 +6,10 @@ public import RequestProject.LTLPath.OIF
 # Stratified monotone planar circuits
 
 We define the stratified monotone planar circuits of Barrington, Lu, Miltersen and Skyum
-[BLMS, Section 2] and state their theorem that the circuit value problem for these circuits is
-in `LogDCFL` [BLMS, Theorem 2, Section 5] as the assumption `StratMCVP_in_LogDCFL`.
+[BLMS99, Section 2] and state their theorem that the circuit value problem for these circuits is
+in `LogDCFL` [BLMS99, Theorem 2, Section 5] as the assumption `StratMCVP_in_LogDCFL`.
 
-In [BLMS] a monotone planar circuit in standard (layered) form has nodes `g_i^l` at layers
+In [BLMS99] a monotone planar circuit in standard (layered) form has nodes `g_i^l` at layers
 `l = 0, …, L`, numbered `1 ≤ i ≤ w_l` inside each layer.  A node is an input node, an `AND`/`OR`
 gate of fan-in two taking inputs `g_a^{l-1}, g_b^{l-1}` with `a < b` from the previous layer, or a
 `COPY` gate taking one input from the previous layer.  Planarity is the condition that wires
@@ -22,7 +22,7 @@ A circuit of this project (`Circuit`, a list of gates in topological order whose
 output) is such a circuit if its gates are listed layer by layer and, inside each layer, in the
 order of the layer (`Circuit.StratLayering`).  A `COPY` gate is an `AND` gate with one argument
 (`Circuit.MonotoneFanin2`).  Since the gates are listed in the order of the layers, the
-numbering inside a layer of [BLMS] is the order of the indices in the list, and the last gate
+numbering inside a layer of [BLMS99] is the order of the indices in the list, and the last gate
 of the list lies in the last layer.
 
 The assumption is stated as a *promise problem*, exactly as for the one-input-face problem in
@@ -31,8 +31,10 @@ circuit on all encodings of stratified monotone planar circuits.
 
 ## References
 
-* [BLMS] D. A. M. Barrington, C.-J. Lu, P. B. Miltersen, S. Skyum, *On monotone planar
-  circuits* (`papers/on-monotone-planar-circuits.pdf`), Theorem 2; the algorithm is in Section 5.
+* [BLMS99] D. A. M. Barrington, C.-J. Lu, P. B. Miltersen, S. Skyum, *On monotone planar
+  circuits*, Proc. 14th IEEE Conference on Computational Complexity (CCC 1999), pp. 24–31
+  (`papers/on-monotone-planar-circuits.pdf`), Theorem 2; the algorithm is in Section 5. Kuhtz
+  restates the theorem as [Kuh10, Theorem 1]. Full entries are in `REFERENCES.md`.
 -/
 
 @[expose] public section
@@ -40,7 +42,7 @@ circuit on all encodings of stratified monotone planar circuits.
 namespace PathChecking
 
 /-- `lay` is a layering of the circuit `C` as a stratified monotone planar circuit in standard
-form [BLMS, Section 2]:
+form [BLMS99, Section 2]:
 
 * the gates are listed layer by layer (`lay` is monotone along the list);
 * the input gates are exactly the gates of layer `0`;
@@ -56,7 +58,7 @@ structure Circuit.StratLayering (C : Circuit) (lay : ℕ → ℕ) : Prop where
   planar : ∀ i i' (h : i < C.length) (h' : i' < C.length), i < i' → lay i = lay i' →
     ∀ a ∈ C[i].args, ∀ b ∈ C[i'].args, a ≤ b
 
-/-- A circuit is *stratified planar* if it has a layering as in [BLMS, Section 2]. -/
+/-- A circuit is *stratified planar* if it has a layering as in [BLMS99, Section 2]. -/
 def Circuit.Stratified (C : Circuit) : Prop := ∃ lay, C.StratLayering lay
 
 /-- Instances of the stratified monotone planar circuit value problem: well-formed circuits
@@ -65,7 +67,7 @@ argument), and stratified planar. -/
 def StratMCVPInstance (C : Circuit) : Prop :=
   C.WellFormed 0 ∧ C.MonotoneFanin2 ∧ C.Stratified
 
-/-- **Assumption** (Barrington–Lu–Miltersen–Skyum [BLMS, Theorem 2]): the circuit value
+/-- **Assumption** (Barrington–Lu–Miltersen–Skyum [BLMS99, Theorem 2]): the circuit value
 problem for stratified monotone planar circuits is in `LogDCFL`.  Stated as a promise problem:
 some language in `LogDCFL` contains the encoding of a stratified monotone planar circuit iff the
 circuit evaluates to `true`. -/

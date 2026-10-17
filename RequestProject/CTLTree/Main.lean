@@ -5,8 +5,11 @@ public import RequestProject.CTLTree.DProg
 /-!
 # CTL tree checking with `O(log n)` rounds of LTL path checking queries
 
-Following [Kuh10], CTL tree checking is decided by a logspace algorithm asking `⌊log₂ n⌋ + 1`
-rounds of polynomially many parallel queries to LTL path checking.
+CTL tree checking is decided by a logspace algorithm asking `⌊log₂ n⌋ + 1` rounds of
+polynomially many parallel queries to LTL path checking. Together with Theorem 1a this gives the
+bound `AC²(logDCFL)` of [Kuh10, Theorem 10]. Kuhtz proves that bound differently, by contracting
+the computation tree and the formula tree directly; the round algorithm here is this project's
+own (see `docs/CTL_TREE_CHECKING.md`). Full entries are in `REFERENCES.md`.
 
 In every round, for every node `u` and every subformula, one LTL query is asked on the *chain*
 of `u`: the path from `u` through the kids of size at least half the size of `u`.  The

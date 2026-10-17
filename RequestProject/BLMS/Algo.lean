@@ -3,7 +3,7 @@ module
 public import RequestProject.BLMS.Classify
 
 /-!
-# The pushdown algorithm of [BLMS, Section 5]
+# The pushdown algorithm of [BLMS99, Section 5]
 
 The algorithm considers the maximal true intervals of the input from left to right.  It keeps a
 stack of intervals and a current interval `J`; a virtual interval `vL` sits below the stack, and

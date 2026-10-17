@@ -28,7 +28,8 @@ theorem lives.
 * `StratMCVP_mem_LogDCFL`: the stratified monotone planar circuit value problem is in `LogDCFL`
   (Barrington–Lu–Miltersen–Skyum). **Proved** (`RequestProject/BLMS/`).
 * **Theorem 1a** `LTLPathChecking_mem_AC1_LogDCFL_of_OIF`: if the Chakraborty–Datta theorem holds,
-  then LTL path checking is in `AC¹[LogDCFL]`. **Proved.** This is the result of [KF09].
+  then LTL path checking is in `AC¹[LogDCFL]`. **Proved.** This is the form of the result in
+  [KF09, Theorem 2] and [KF12, Theorem 1].
   `LTLPathChecking_mem_AC1_LogDCFL_of_strat`: if the Barrington–Lu–Miltersen–Skyum theorem
   holds, then LTL path checking is in `AC¹[LogDCFL]`; the query circuits are built directly as
   stratified circuits. **Proved.**
@@ -76,17 +77,22 @@ theorem lives.
 
 The keys refer to `REFERENCES.md`.
 
-* Theorem 1a: Kuhtz–Finkbeiner [KF09, Theorem 1] and [KF12, Theorem 1] prove this for finite
+* Theorem 1a: Kuhtz–Finkbeiner [KF09, Theorem 2] and [KF12, Theorem 1] prove this for finite
   paths. [Kuh10, Corollary 4] proves it for ultimately periodic paths, which is the setting
-  used here. The `LogDCFL` bound for one-input-face circuits is [CD06, Theorem 1], used as
-  [KF12, Theorem 3.1]. The `LogDCFL` bound for stratified circuits is [BLMS, Theorem 2].
-* Theorem 1b: [Kuh10, Theorem 10].
+  used here. The `LogDCFL` bound for one-input-face circuits is [CD06, Theorem 1], restated as
+  [KF09, Theorem 1], [KF12, Theorem 3.1] and [Kuh10, Theorem 2]. The `LogDCFL` bound for
+  stratified circuits is [BLMS99, Theorem 2], restated as [Kuh10, Theorem 1]. The proof uses
+  parallel tree contraction, for which [KF12, Section 2.3] follows [ADKP89].
+* Theorem 1b: [Kuh10, Theorem 10]. Kuhtz contracts the computation tree and the formula tree
+  directly. The round algorithm `CTLTreeChecking_roundDecidable`, which reduces Theorem 1b to
+  Theorem 1a, is this project's own (see `docs/CTL_TREE_CHECKING.md`).
 * Theorem 1c: [KF12, Theorem 3] and [Kuh10, Theorem 13] (BLTL+Past path checking is in
   `AC¹(logDCFL) ⊆ NC`, for finite paths).
 * P-hardness of MCVP, used for Theorems 2 and 4: [Lad75], [Gol77]; see also [GHR95].
 * Theorems 2–5: we know of no published source for these and have not searched the
   literature for one. [Kuh10, Chapter 7] lists the complexity of CTL* tree checking as an open
-  question.
+  question. CTL* is due to Emerson–Halpern [EH86]. Theorem 5b uses [CD06, Theorem 1] as a
+  hypothesis.
 
 The statements use this project's own definitions: binary encodings, the Turing machine
 model, logspace uniformity, finite trees whose leaves loop to themselves, and lasso paths. We
@@ -106,7 +112,7 @@ value problem is in `LogDCFL`. It is stated as a promise problem in `OIFMCVP_in_
 (`RequestProject/LTLPath/OIF.lean`).
 
 Stated, not proved. It is used only by the conditional forms `..._of_OIF`, which represent the
-original result of Kuhtz–Finkbeiner [KF09]; the unconditional Theorem 1a uses the
+original result of Kuhtz–Finkbeiner [KF09, Theorem 2], [KF12, Theorem 1]; the unconditional Theorem 1a uses the
 Barrington–Lu–Miltersen–Skyum theorem `StratMCVP_mem_LogDCFL` instead. -/
 theorem OIFMCVP_mem_LogDCFL : OIFMCVP_in_LogDCFL := by
   sorry
@@ -120,20 +126,20 @@ is decided by a logspace algorithm with `O(log n)` rounds of parallel queries to
 circuit instances. `RoundDecidable.mem_ACOracle_of_LogDCFL` (`RequestProject/ACRound/Main.lean`)
 turns this into an `AC¹[LogDCFL]` circuit family.
 
-Reference: [KF09, Theorem 1], [KF12, Theorem 1] for finite paths; [Kuh10, Corollary 4] for
+Reference: [KF09, Theorem 2], [KF12, Theorem 1] for finite paths; [Kuh10, Corollary 4] for
 ultimately periodic paths. -/
 theorem LTLPathChecking_mem_AC1_LogDCFL_of_OIF (h : OIFMCVP_in_LogDCFL) :
     LTLPathChecking ∈ ACOracle 1 LogDCFL := by
   obtain ⟨B, hB, hBC⟩ := h
   exact (ltl_roundDecidable B hBC).mem_ACOracle_of_LogDCFL hB
 
-/-- **Barrington–Lu–Miltersen–Skyum theorem** [BLMS, Theorem 2]: the stratified monotone planar
-circuit value problem is in `LogDCFL`. The algorithm is described in [BLMS, Section 5]. It is
+/-- **Barrington–Lu–Miltersen–Skyum theorem** [BLMS99, Theorem 2]: the stratified monotone planar
+circuit value problem is in `LogDCFL`. The algorithm is described in [BLMS99, Section 5]. It is
 stated as a promise problem in `StratMCVP_in_LogDCFL` (`RequestProject/LTLPath/Strat.lean`).
 
 Proof: `BLMS.stratMCVP_in_LogDCFL` (`RequestProject/BLMS/Main.lean`). A logspace computable map
 sends the encoding of a circuit to the initial configuration of the pushdown algorithm of
-[BLMS, Section 5] followed by enough copies of the table of its moves, and a fixed
+[BLMS99, Section 5] followed by enough copies of the table of its moves, and a fixed
 deterministic pushdown automaton accepts this word iff the circuit evaluates to `true`. -/
 theorem StratMCVP_mem_LogDCFL : StratMCVP_in_LogDCFL :=
   BLMS.stratMCVP_in_LogDCFL
@@ -157,7 +163,10 @@ theorem LTLPathChecking_mem_AC1_LogDCFL_of_strat (h : StratMCVP_in_LogDCFL) :
 `AC¹[LogDCFL]`.
 
 This follows from the conditional form `LTLPathChecking_mem_AC1_LogDCFL_of_strat` and the
-Barrington–Lu–Miltersen–Skyum theorem `StratMCVP_mem_LogDCFL`. -/
+Barrington–Lu–Miltersen–Skyum theorem `StratMCVP_mem_LogDCFL` [BLMS99, Theorem 2].
+
+Reference: [KF09, Theorem 2], [KF12, Theorem 1] for finite paths; [Kuh10, Corollary 4] for
+ultimately periodic paths. -/
 theorem LTLPathChecking_mem_AC1_LogDCFL : LTLPathChecking ∈ ACOracle 1 LogDCFL :=
   LTLPathChecking_mem_AC1_LogDCFL_of_strat StratMCVP_mem_LogDCFL
 
@@ -169,7 +178,8 @@ Proof: `RequestProject/CTLTree/`. In every round one LTL query is asked for ever
 every subformula, on the *chain* of `u` (the path through the kids of at least half the size of
 `u`); the values of `EX`, `EU` and `AU` subformulas through the other kids are read from the
 answers of the previous round, so after `r` rounds the answers are correct for all nodes of
-size `< 2^r`. -/
+size `< 2^r`. This algorithm is this project's own; [Kuh10, Theorem 10] proves the `AC²(logDCFL)`
+bound by contracting the computation tree directly. -/
 theorem CTLTreeChecking_roundDecidable : RoundDecidable CTLTreeChecking LTLPathChecking 1 :=
   CTLT.roundDecidable
 
@@ -259,7 +269,7 @@ theorem CTLStarShallowTreeChecking_roundDecidable (k : ℕ) :
   exact ShallowP.roundDecidable_of_specs k Q D hQ hD hQs hDs
 
 /-- **Theorem 5b.** If the one-input-face monotone planar circuit value problem is in `LogDCFL`
-(Chakraborty–Datta), then CTL* tree checking on instances of size `n` whose branching nodes all
+(Chakraborty–Datta [CD06, Theorem 1]), then CTL* tree checking on instances of size `n` whose branching nodes all
 lie at depth `< (⌊log₂ n⌋ + 1)^k` is in `AC^{k+1}[LogDCFL]`.
 
 Proof: combine Theorem 5a with Theorem 1a (conditional form) using

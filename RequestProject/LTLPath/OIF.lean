@@ -29,9 +29,10 @@ of other words).  This is the weakest form of the statement.
 ## References
 
 * [CD06] T. Chakraborty, S. Datta, *One-input-face MPCVP is hard for L, but in LogDCFL*,
-  FSTTCS 2006, LNCS 4337, pp. 57–68 (also ECCC TR06-130), Theorem 1. Kuhtz–Finkbeiner use it
-  as [KF12, Theorem 3.1], for circuits without variable gates, which is the form used here
-  (`C.WellFormed 0`). See `REFERENCES.md`.
+  FSTTCS 2006, LNCS 4337, pp. 57–68 (also ECCC TR06-130), Theorem 1 of the ECCC report.
+  It is restated as [KF09, Theorem 1], [KF12, Theorem 3.1] and [Kuh10, Theorem 2];
+  in [KF12, Theorem 3.1] and [Kuh10, Theorem 2] it is stated for circuits without variable gates,
+  which is the form used here (`C.WellFormed 0`). Full entries are in `REFERENCES.md`.
 -/
 
 @[expose] public section
@@ -86,8 +87,8 @@ without input bits, monotone of fan-in at most two, and one-input-face planar. -
 def OIFMCVPInstance (C : Circuit) : Prop :=
   C.WellFormed 0 ∧ C.MonotoneFanin2 ∧ C.OneInputFacePlanar
 
-/-- **Assumption** (Chakraborty–Datta [CD06]): the one-input-face monotone planar circuit value
-problem is in `LogDCFL`.  Stated as a promise problem: some language in `LogDCFL` contains the
+/-- **Assumption** (Chakraborty–Datta [CD06, Theorem 1]): the one-input-face monotone planar
+circuit value problem is in `LogDCFL`.  Stated as a promise problem: some language in `LogDCFL` contains the
 encoding of a one-input-face monotone planar circuit iff the circuit evaluates to `true`. -/
 def OIFMCVP_in_LogDCFL : Prop :=
   ∃ B ∈ LogDCFL, ∀ C : Circuit, OIFMCVPInstance C → (C.encode ∈ B ↔ C.eval ∅ [] = true)

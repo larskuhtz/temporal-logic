@@ -6,7 +6,7 @@ public import RequestProject.BLMS.Pair
 # Computing images of intervals and classifying pairs of intervals
 
 Computable versions of the evaluation of one or two intervals, as used by the algorithm of
-[BLMS, Section 5]:
+[BLMS99, Section 5]:
 
 * `stepI l (a, b)` is the image `[a', b')` of the interval `[a, b)` under one evaluation step,
   computed by a left-to-right scan over the gates of the next layer (`stepI_spec`);

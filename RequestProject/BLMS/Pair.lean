@@ -5,7 +5,7 @@ public import RequestProject.BLMS.Layered
 /-!
 # Discarding and merging intervals
 
-The two key facts behind the algorithm of [BLMS, Section 5], stated for the abstract layered
+The two key facts behind the algorithm of [BLMS99, Section 5], stated for the abstract layered
 circuits of `RequestProject/BLMS/Layered.lean`:
 
 * `LC.discard`: an interval `I` that dies (alone) at layer `e + 1` can be removed from the input
@@ -14,8 +14,8 @@ circuits of `RequestProject/BLMS/Layered.lean`:
 * `LC.merge`: if two neighbouring intervals `I`, `J` merge in the evaluation of `I ∪ J` alone
   (`MergeData I J e`), then the gap between them can be filled.
 
-Both facts are a precise version of [BLMS, Propositions 8 and 9].  The conditions on simultaneous
-deaths (`PushData.fin`, `DiscData.fin`) are needed: without them the algorithm of [BLMS] as stated
+Both facts are a precise version of [BLMS99, Propositions 8 and 9].  The conditions on simultaneous
+deaths (`PushData.fin`, `DiscData.fin`) are needed: without them the algorithm of [BLMS99] as stated
 in the paper may give a wrong answer.
 -/
 
@@ -244,7 +244,7 @@ lemma right_window (hP : c.Planar) {I J : Set ℕ} {e : ℕ} (he : e < c.D) (hJ 
         exact hf.ne_empty rfl
       · exact hf ⟨i, hi, hA, hlo, hgt⟩
 
-/-- **Discarding a dying interval** (a precise version of [BLMS, Proposition 9]).  `A` is the
+/-- **Discarding a dying interval** (a precise version of [BLMS99, Proposition 9]).  `A` is the
 part of the input to the left of `I`, bounded by the left neighbour `H` of `I`, and `B` the part
 to the right of `I`, bounded by the right neighbour `J`; either part may be empty. -/
 theorem discard (hP : c.Planar) {A B I : Set ℕ} {e : ℕ} (he : e < c.D)
@@ -272,7 +272,7 @@ theorem discard (hP : c.Planar) {A B I : Set ℕ} {e : ℕ} (he : e < c.D)
       exact ⟨fun l => {z | ∃ j ∈ c.ev l J, j ≤ z}, hBJ, a1, a2, a3⟩
   exact discard_core hP he Lft Rgt hIe hId (union_subset_union hA0 hB0) hL1 hR1 hLI hIR hmL hmR
 
-/-- **Merging two intervals** (a precise version of [BLMS, Proposition 8]): if `I` and `J` merge
+/-- **Merging two intervals** (a precise version of [BLMS99, Proposition 8]): if `I` and `J` merge
 in the evaluation of `I ∪ J`, then any set `G` of positions between them can be added to the
 input. -/
 theorem merge (hP : c.Planar) {A B I J G : Set ℕ} {e : ℕ} (he : e < c.D)

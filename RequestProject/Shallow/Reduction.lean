@@ -35,7 +35,7 @@ the formula with `d + 1` rounds of parallel LTL path-checking queries.
 
 We know of no published source for this reduction and have not checked the literature for
 one. The target problem, LTL path checking, is in `AC¹(LogDCFL)` by Kuhtz–Finkbeiner
-[KF09, Theorem 1], [KF12, Theorem 1] for finite paths, and by [Kuh10, Corollary 4] for
+[KF09, Theorem 2], [KF12, Theorem 1] for finite paths, and by [Kuh10, Corollary 4] for
 ultimately periodic paths. Full entries are in `REFERENCES.md`.
 -/
 

@@ -4,17 +4,18 @@ There are two conditional forms in `RequestProject/Statements.lean`, both proved
 `sorry` and using only the axioms `propext`, `Classical.choice` and `Quot.sound`:
 
 * `LTLPathChecking_mem_AC1_LogDCFL_of_OIF` assumes the Chakraborty–Datta theorem
-  `OIFMCVP_in_LogDCFL` [CD06, Theorem 1]. This is the original result of [KF09].
+  `OIFMCVP_in_LogDCFL` [CD06, Theorem 1]. This is the form of the result in [KF09, Theorem 2]
+  and [KF12, Theorem 1].
 * `LTLPathChecking_mem_AC1_LogDCFL_of_strat` assumes the Barrington–Lu–Miltersen–Skyum theorem
-  `StratMCVP_in_LogDCFL` [BLMS, Theorem 2]. The query circuits are drawn directly as stratified
+  `StratMCVP_in_LogDCFL` [BLMS99, Theorem 2]. The query circuits are drawn directly as stratified
   monotone planar circuits, so the reduction from one-input-face circuits to stratified circuits
   in [CD06] is not needed (see the last section).
 
 The unconditional `LTLPathChecking_mem_AC1_LogDCFL` is derived from the second form and the
 Barrington–Lu–Miltersen–Skyum theorem `StratMCVP_mem_LogDCFL`, which is proved in
-`RequestProject/BLMS/` following [BLMS, Section 5]. The algorithm follows Kuhtz–Finkbeiner
+`RequestProject/BLMS/` following [BLMS99, Section 5]. The algorithm follows Kuhtz–Finkbeiner
 [KF12, Sections 3–5] (monotone circuits, construction of the circuit, parallel tree
-contraction [ADKP89]), adapted to lasso paths. File names below refer to
+contraction; [KF12, Section 2.3] takes the contraction from [ADKP89]), adapted to lasso paths. File names below refer to
 `RequestProject/LTLPath/` unless stated otherwise.
 
 ## Structure of the proof
@@ -89,7 +90,7 @@ contraction [ADKP89]), adapted to lasso paths. File names below refer to
 * Status of gate `h` at round `t`: const gates are always known (value computed directly);
   at round `0` everything else is unknown; afterwards known iff the two answers agree.
 
-### Tree contraction schedule (static, Abrahamson–Dadoun–Kirkpatrick–Przytycka style)
+### Tree contraction schedule (static, in the style of [ADKP89])
 * `S_{r,0}` = leaf indices divisible by `2^r`. `k` odd at stage `r`: `k / 2^r` odd.
   `isLeft k` iff `lca(k, k+2^r)` is deeper (larger position) than `lca(k-2^r, k)`; `lca(a,b)` =
   largest node whose leaf range contains `a` and `b`.
@@ -124,7 +125,7 @@ contraction [ADKP89]), adapted to lasso paths. File names below refer to
 ## Variant with stratified query circuits
 
 `LTLPathChecking_mem_AC1_LogDCFL_of_strat` uses the same round algorithm, but every query
-circuit is drawn as a stratified monotone planar circuit in the sense of [BLMS, Section 2]
+circuit is drawn as a stratified monotone planar circuit in the sense of [BLMS99, Section 2]
 (`Strat.lean`: `Circuit.StratLayering`, `StratMCVPInstance`, `StratMCVP_in_LogDCFL`). The proof
 reuses the abstract algorithm and changes only the shape of the queries.
 

@@ -63,3 +63,20 @@ The modelling conventions are:
 - paths are ultimately periodic (`stem · loop^ω`);
 - trees are finite, and every leaf loops to itself;
 - a CTL* formula holds on a tree if it holds on every path from the root.
+
+## Differences from the cited works
+
+The formal statements use this project's own definitions: binary encodings, the Turing machine
+model, logspace-uniform circuits, finite trees whose leaves loop to themselves, and lasso
+paths. They have not been compared with the cited works in every detail. Known differences
+(citation keys refer to `REFERENCES.md`):
+
+* [KF09], [KF12] and [Kuh10, Theorem 6] treat **finite** paths. The project's
+  `LTLPathChecking` uses **ultimately periodic** (lasso) paths, matching [Kuh10, Corollary 4].
+  `BLTLPastPathChecking` also uses lasso paths, while [KF12, Theorem 3] and
+  [Kuh10, Theorem 13] are stated for finite paths.
+* Theorem 1c is stated with the weaker bound `NC`, as in the original task. The cited works
+  give `AC¹(logDCFL) ⊆ NC`.
+* Theorem 1b is proved by a round algorithm that reduces CTL tree checking to LTL path
+  checking. [Kuh10, Theorem 10] obtains the same bound by contracting the computation tree
+  directly (see `docs/CTL_TREE_CHECKING.md`).
