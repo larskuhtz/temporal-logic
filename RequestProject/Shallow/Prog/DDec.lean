@@ -128,7 +128,7 @@ lemma eval_tokE_raw (w : Word) (q : ℕ) (a : List Bool) (C : ℕ) (ρ : Fin V �
     have : 2 ^ b ≤ 16 := by
       have := Nat.pow_le_pow_right (show 0 < 2 by omega) (show b ≤ 4 by omega); simpa using this
     rw [min_eq_left (by omega : 2 ^ b ≤ C)]
-    split_ifs <;> simp <;> omega
+    split_ifs <;> simp; omega
   have hts : (tokSum p).eval x C ρ = chunk w pv := by
     rw [tokSum, foldr_add_eval _ (by rw [hsum]; have := chunk_le w pv; omega), hsum]
   have hg' : (Ex.bin .lt (.bin .add (.bin .mul (.c 5) p) (.c 4)) (.v vN) : Ex V).eval x C ρ = 1 := by

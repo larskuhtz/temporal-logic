@@ -72,7 +72,7 @@ lemma selfCirc_values_inputs (B : Language) (x : Word) (n : ℕ) (vals : List Bo
   | zero => simp
   | succ n ih =>
     rw [List.range_succ, List.map_append, List.foldl_append, ih]
-    simp [Gate.eval, List.range_succ]
+    simp [Gate.eval]
 
 lemma selfCirc_eval (B : Language) (x : Word) :
     (selfCirc x.length).eval B x = true ↔ x ∈ B := by
@@ -131,7 +131,7 @@ lemma selfGen_output (w : Word) : selfGen.output 1 w = (selfCirc w.length).encod
       refine ⟨trivial, ?_⟩
       simp only [run_seq, run_outToks]
       rw [(run_emitNat 0 1 2 (by decide) hC _).1]
-      simp [LS.encodeToks_append, LS.encodeToks_cons, encodeToks])
+      simp [encodeToks])
   have h2 := fun ρ => run_loop_spec (V := 3) (w := w) (C := C) 0 .len (emitNat 0 1 2) ρ
     (fun _ _ => True) (fun i => encodeToks (natToks i)) trivial
     (fun i _ ρ' _ => ⟨trivial, by rw [(run_emitNat 0 1 2 (by decide) hC _).1]; simp⟩)

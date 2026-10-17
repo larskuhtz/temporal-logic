@@ -262,7 +262,7 @@ theorem run_comp (hC : 1 ≤ C) (SB : ℕ) : ∀ (e : E) (d t sp : ℕ) (ρ : Fi
     have hb : eval w C d (envOf ρ1) b = eval w C d (envOf ρ) b :=
       eval_congr w C b d _ _ hw.2 (fun x hx => a3 x (by omega) (Or.inl hx) (by omega))
     have ht2 : ρ2 (fv V t) = ρ1 (fv V t) := b3 t (by omega) (Or.inr ⟨hSt, by omega⟩) (by omega)
-    simp only [comp, run_seq, run_set, List.nil_append]
+    simp only [comp, run_seq, run_set]
     rw [← hρ1, ← hρ2]
     refine ⟨by simp [a1, b1], ?_, fun z hz hzr hzt => ?_⟩
     · simp only [Function.update_self, eval_bin, eval_v, eval]
@@ -277,7 +277,7 @@ theorem run_comp (hC : 1 ≤ C) (SB : ℕ) : ∀ (e : E) (d t sp : ℕ) (ρ : Fi
     set ρ1 := ((comp V c d t sp).run w C ρ).1 with hρ1
     have hcongr : ∀ e : E, e.wf d = true → eval w C d (envOf ρ1) e = eval w C d (envOf ρ) e :=
       fun e he => eval_congr w C e d _ _ he (fun x hx => c3 x (by omega) (Or.inl hx) (by omega))
-    simp only [comp, run_seq, List.nil_append]
+    simp only [comp, run_seq]
     rw [← hρ1]
     by_cases hcv : eval w C d (envOf ρ) c ≠ 0
     · rw [run_ite_pos (by rw [eval_v, c2]; exact hcv)]
@@ -341,7 +341,7 @@ theorem run_comp (hC : 1 ≤ C) (SB : ℕ) : ∀ (e : E) (d t sp : ℕ) (ρ : Fi
         by_cases hfi0 : f i ≠ 0
         · rw [run_ite_pos (by simp [b2, hfi, hfi0])]
           simp only [run_seq, run_set, List.append_nil]
-          refine ⟨⟨fun z hz hzr hzt => ?_, Or.inr ⟨?_, ?_, ?_⟩⟩, by simp [b1]⟩
+          refine ⟨⟨fun z hz hzr hzt => ?_, Or.inr ⟨?_, ?_, ?_⟩⟩, by simp⟩
           · rw [Function.update_of_ne (fv_ne hz (by omega) (by omega)),
               Function.update_of_ne (fv_ne hz (by omega) hzt),
               b3 z hz (by omega) (by omega), e'' z hz (by omega)]
@@ -352,8 +352,8 @@ theorem run_comp (hC : 1 ≤ C) (SB : ℕ) : ∀ (e : E) (d t sp : ℕ) (ρ : Fi
             simp [ρ'', hfs, hfi0]
           · rw [hfs, if_pos hfi0]; omega
         · rw [run_ite_neg (by simp [b2, hfi]; omega)]
-          simp only [run_skip, List.append_nil]
-          refine ⟨⟨fun z hz hzr hzt => ?_, Or.inl ⟨?_, ?_, ?_⟩⟩, by simp [b1]⟩
+          simp only [run_skip]
+          refine ⟨⟨fun z hz hzr hzt => ?_, Or.inl ⟨?_, ?_, ?_⟩⟩, by simp⟩
           · rw [b3 z hz (by omega) (by omega), e'' z hz (by omega)]
             exact hIf z hz hzr hzt
           · rw [b3 sp (by omega) (Or.inr ⟨by omega, by omega⟩) (by omega),
@@ -422,7 +422,7 @@ theorem run_comp (hC : 1 ≤ C) (SB : ℕ) : ∀ (e : E) (d t sp : ℕ) (ρ : Fi
       simp only [run_seq, b1, List.nil_append]
       by_cases hfi0 : f i ≠ 0
       · rw [run_ite_pos (by simp [b2, hfi, hfi0])]
-        simp only [run_set, List.append_nil]
+        simp only [run_set]
         refine ⟨⟨fun z hz hzr hzt => ?_, ?_⟩, trivial⟩
         · rw [Function.update_of_ne (fv_ne hz (by omega) hzt), b3 z hz (by omega) (by omega),
             e'' z hz (by omega)]
@@ -430,7 +430,7 @@ theorem run_comp (hC : 1 ≤ C) (SB : ℕ) : ∀ (e : E) (d t sp : ℕ) (ρ : Fi
         · simp only [Function.update_self, eval_bin, ap_add, eval_v, eval_c, ht3]
           rw [countF_succ, if_pos hfi0, min_eq_left hC]
       · rw [run_ite_neg (by simp [b2, hfi]; omega)]
-        simp only [run_skip, List.append_nil]
+        simp only [run_skip]
         refine ⟨⟨fun z hz hzr hzt => ?_, ?_⟩, trivial⟩
         · rw [b3 z hz (by omega) (by omega), e'' z hz (by omega)]
           exact hIf z hz hzr hzt

@@ -397,7 +397,7 @@ lemma chainF_eq {p Z : ℕ} {l : Finset ℕ} {cs : List LTree} {R : List Tok}
     have e := drop_append_of_drop (kids_drop h).2
     simp [rngL, chainSel, isNode, tc_of_drop e, Tok.code]
   rw [h1, h2, h3, rngL_toksList]
-  simp only [List.nil_append, List.append_nil, List.cons_append, List.singleton_append]
+  simp only [List.nil_append, List.append_nil, List.cons_append]
   congr 1
   refine List.flatMap_congr fun j hj => ?_
   rw [List.mem_range] at hj
@@ -429,7 +429,7 @@ lemma chainF_big {p Z : ℕ} {l : Finset ℕ} {cs : List LTree} {R : List Tok}
 /-- **The chain ends if there is no big kid.** -/
 lemma chainF_none {p Z : ℕ} {l : Finset ℕ} {cs : List LTree} {R : List Tok}
     (h : ts.drop p = (LTree.node l cs).toks ++ R) (hZ : Z ≤ 2 * sz ts p)
-    (hn : ∀ j (hj : j < cs.length), 2 * sz ts (kpos l cs p j) < Z) :
+    (hn : ∀ j, j < cs.length → 2 * sz ts (kpos l cs p j) < Z) :
     chainF ts Z p = [p] := by
   rw [chainF_eq h hZ]
   congr 1
@@ -478,9 +478,9 @@ def noBig (ts : List Tok) (Z p : ℕ) : Bool :=
 
 lemma noBig_iff {p Z : ℕ} {l : Finset ℕ} {cs : List LTree} {R : List Tok}
     (h : ts.drop p = (LTree.node l cs).toks ++ R) :
-    noBig ts Z p = true ↔ ∀ j (hj : j < cs.length), 2 * sz ts (kpos l cs p j) < Z := by
+    noBig ts Z p = true ↔ ∀ j, j < cs.length → 2 * sz ts (kpos l cs p j) < Z := by
   simp only [noBig, List.all_eq_true, List.mem_range, Bool.not_eq_true', Bool.and_eq_false_iff,
-    decide_eq_false_iff_not, not_lt, Nat.le_zero, Bool.not_eq_true]
+    decide_eq_false_iff_not, not_lt, Nat.le_zero]
   have hte := tend_tree _ h
   constructor
   · intro H j hj

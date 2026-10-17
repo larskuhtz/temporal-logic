@@ -89,7 +89,7 @@ def setCode (x a b : Var) : Pr V :=
 
 lemma Env.MK (hE : Env C w K) : ((toLC C).N + 1) * ((toLC C).N + 1) ≤ K := by
   have h1 := N_le (C := C)
-  have h2 := hE.n_le
+  have h2 := length_le_gts (C := C)
   have h3 := hE.gts_le
   have h4 := hE.K_ge
   have : (toLC C).N + 1 ≤ w.length + 2 := by omega
@@ -141,17 +141,17 @@ lemma entryP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ)
   rcases act with _ | _ | _ | _ | _ <;> simp only [actCode] at hAc
   · rw [run_ite_pos (by simpa [eqc_eval (show 0 ≤ K by omega)] using hAc)]
     simp [entry, wordOf]
-  · rw [run_ite_neg (by simp [eqc, hAc, min_eq_left (show 0 ≤ K by omega)]),
+  · rw [run_ite_neg (by simp [eqc, hAc]),
       run_ite_pos (by simpa [eqc_eval (show 1 ≤ K by omega)] using hAc)]
     simp [entry, wordOf]
-  · rw [run_ite_neg (by simp [eqc, hAc, min_eq_left (show 0 ≤ K by omega)]),
+  · rw [run_ite_neg (by simp [eqc, hAc]),
       run_ite_neg (by simp [eqc, hAc, min_eq_left (show 1 ≤ K by omega)]),
       run_ite_pos (by simpa [eqc_eval (show 2 ≤ K by omega)] using hAc)]
     rw [run_seq_of (run_eq_st' (by rfl) ρ), run_emitCode, List.nil_append,
       setCode_spec hE ρ hG vEc vIa vJb (by rw [hIa]; exact dI.1) (by rw [hJb]; exact dJ.2), hIa,
       hJb]
-    simp [entry, wordOf_cons, wordOf]
-  · rw [run_ite_neg (by simp [eqc, hAc, min_eq_left (show 0 ≤ K by omega)]),
+    simp [entry, wordOf]
+  · rw [run_ite_neg (by simp [eqc, hAc]),
       run_ite_neg (by simp [eqc, hAc, min_eq_left (show 1 ≤ K by omega)]),
       run_ite_neg (by simp [eqc, hAc, min_eq_left (show 2 ≤ K by omega)]),
       run_ite_pos (by simpa [eqc_eval (show 3 ≤ K by omega)] using hAc)]
@@ -174,15 +174,15 @@ lemma entryP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ)
     obtain ⟨n1, n2⟩ := nextRunP_spec hE hC _ G3
     have G4 := G3.st (w := w) (K := K) nextRunP (globs_disj _ (by decide))
     simp only [Function.update_self] at n1 n2
-    have hb := LC.nextRun_le (c := toLC C) (inp := Conc.inp C) _ dJ.2
+    have hb := LC.nextRun_le (c := toLC C) (inp := Conc.inp C) ((toLC C).dec (ρ vAJ)).2
     rw [setCode_spec hE _ G4 vEc vNa vNb (by rw [n1]; exact hb.1) (by rw [n2]; exact hb.2), n1, n2]
-    simp only [f1 vAJ (by decide), List.nil_append, List.append_nil]
-    simp [entry, wordOf_cons, wordOf]
-  · rw [run_ite_neg (by simp [eqc, hAc, min_eq_left (show 0 ≤ K by omega)]),
+    simp only [f1 vAJ (by decide), List.nil_append]
+    simp [entry, wordOf]
+  · rw [run_ite_neg (by simp [eqc, hAc]),
       run_ite_neg (by simp [eqc, hAc, min_eq_left (show 1 ≤ K by omega)]),
       run_ite_neg (by simp [eqc, hAc, min_eq_left (show 2 ≤ K by omega)]),
       run_ite_neg (by simp [eqc, hAc, min_eq_left (show 3 ≤ K by omega)]), run_emitCode]
-    simp [entry, wordOf_cons, wordOf]
+    simp [entry, wordOf]
 
 /-! ## Rounds -/
 

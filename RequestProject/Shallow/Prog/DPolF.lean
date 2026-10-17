@@ -109,7 +109,7 @@ lemma sp_polFP (hE : Env ts q a C ρ) (p : Ex V)
         rw [if_pos h5] at hI
         unfold polFAtP
         refine sp_seqE (o1 := []) (o2 := []) ((sp_numOKP hEr (.bin .add (.v fP) (.c 1))
-          (by simp (disch := omega) [] <;> omega)).frame.mono
+          (by simp (disch := omega); omega)).frame.mono
           (W' := polFW) (by decide) (fun _ _ h => h)) (fun r1 _ h1 => ?_) rfl
         obtain ⟨h1R, h1f⟩ := h1
         have hE1 : Env ts q a C r1 := hEr.of_frame h1f (by decide) (by decide)
@@ -117,8 +117,7 @@ lemma sp_polFP (hE : Env ts q a C ρ) (p : Ex V)
         have h1C : r1 fC = r fC := h1f fC (by decide)
         have h1D : r1 fD = r fD := h1f fD (by decide)
         simp (disch := omega) only [eval_bin, ap_add, eval_v, eval_c, min_eq_left] at h1R
-        refine sp_seqE (o1 := []) (o2 := []) ((sp_numEndP hE1 (.bin .add (.v fP) (.c 1))
-          (by simp (disch := omega) [h1P]; omega)).frame.mono
+        refine sp_seqE (o1 := []) (o2 := []) ((sp_numEndP hE1 (.bin .add (.v fP) (.c 1))).frame.mono
           (W' := polFW) (by decide) (fun _ _ h => h)) (fun r2 _ h2 => ?_) rfl
         obtain ⟨h2R, h2f⟩ := h2
         simp (disch := omega) only [eval_bin, ap_add, eval_v, eval_c, min_eq_left, h1P] at h2R
@@ -169,9 +168,9 @@ lemma sp_polFP (hE : Env ts q a C ρ) (p : Ex V)
           · refine sp_ite_neg (by simp [hc, min_eq_left (show 1 ≤ C by omega)]) ?_
             refine sp_set2 (by decide) (by decide) (Or.inr ⟨?_, ⟨?_, ?_, ?_, ?_⟩, ?_⟩)
             · simp (disch := first | decide | omega) [Function.update_of_ne, hd]
-            · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
-            · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
-            · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
+            · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
+            · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
+            · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
             · simp (disch := first | decide | omega) [Function.update_of_ne]
               rw [← hI]; simp [hc]
             · simp (disch := first | decide | omega) [Function.update_of_ne]
@@ -185,11 +184,11 @@ lemma sp_polFP (hE : Env ts q a C ρ) (p : Ex V)
             rw [if_pos hn] at hI
             refine sp_set (by decide) (Or.inr ⟨?_, ⟨?_, ?_, ?_, ?_⟩, ?_⟩)
             · simp (disch := first | decide | omega) [Function.update_of_ne, hd]
-            · simp (disch := first | decide | omega) [] <;> omega
-            · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
-            · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
+            · simp (disch := first | decide | omega); omega
+            · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
+            · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
             · simp (disch := first | decide | omega) [Function.update_of_ne, hI]
-            · simp (disch := first | decide | omega) []
+            · simp (disch := first | decide | omega)
           · refine sp_ite_neg (by
               simp only [eval_bin, ap_add, ap_eq, ht, eval_c]
               simp (disch := omega) only [min_eq_left]
@@ -204,9 +203,9 @@ lemma sp_polFP (hE : Env ts q a C ρ) (p : Ex V)
               rw [if_pos hu] at hI
               refine sp_set2 (by decide) (by decide) (Or.inr ⟨?_, ⟨?_, ?_, ?_, ?_⟩, ?_⟩)
               · simp (disch := first | decide | omega) [Function.update_of_ne, hd]
-              · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
-              · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
-              · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
+              · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
+              · simp (disch := first | decide | omega) [Function.update_of_ne]
+              · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
               · simp (disch := first | decide | omega) [Function.update_of_ne, hI]
               · simp (disch := first | decide | omega) [Function.update_of_ne]
             · refine sp_ite_neg (by

@@ -75,7 +75,7 @@ def numEq (p q : ℕ) : Bool := numLe ts p q && numLe ts q p
 
 /-- A strictly increasing list of numbers followed by `)` starts at `q`. -/
 def labSuf (q : ℕ) : Bool :=
-  if h : ts.length ≤ q then false
+  if ts.length ≤ q then false
   else if tc ts q = 4 then true
   else numOK ts q && (tc ts (numEnd ts q) == 4 || numLt ts q (numEnd ts q)) &&
     labSuf (numEnd ts q)

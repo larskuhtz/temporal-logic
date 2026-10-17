@@ -59,7 +59,7 @@ lemma qsysR_dead {h : ℕ} (hl : T.live S Qd st h0 h = false) :
     T.qsysR S Qd st h0 β h = ⟨.const ((st h).getD β), []⟩ := by
   unfold qsysR GS.qsys; rw [if_neg (by simp [hl])]
 
-lemma QY_toNat {h : ℕ} (hl : T.live S Qd st h0 h = true) :
+lemma QY_toNat (h : ℕ) :
     ((T.QY S Qd st h0 h).toNat : ℤ) = T.QY S Qd st h0 h := by
   have := QY_nonneg (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) h
   omega
@@ -87,16 +87,16 @@ theorem qLS_ok (hck : T.ConstKnown st) (hd : T.Dead S st) (hcl : T.Cl S st) :
   have hYeq : ∀ a b, T.live S Qd st h0 a = true → T.live S Qd st h0 b = true →
       (T.QY S Qd st h0 a).toNat = (T.QY S Qd st h0 b).toNat →
       T.QY S Qd st h0 a = T.QY S Qd st h0 b := by
-    intro a b ha hb e
-    have := QY_toNat (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) ha
-    have := QY_toNat (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) hb
+    intro a b _ _ e
+    have := QY_toNat (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) a
+    have := QY_toNat (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) b
     omega
   have hYsucc : ∀ a b, T.live S Qd st h0 a = true → T.live S Qd st h0 b = true →
       ((T.QY S Qd st h0 a).toNat + 1 = (T.QY S Qd st h0 b).toNat ↔
         T.QY S Qd st h0 b = T.QY S Qd st h0 a + 1) := by
-    intro a b ha hb
-    have := QY_toNat (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) ha
-    have := QY_toNat (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) hb
+    intro a b _ _
+    have := QY_toNat (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) a
+    have := QY_toNat (T := T) (S := S) (Qd := Qd) (st := st) (h0 := h0) b
     omega
   refine ⟨GS.qsys_ordered gate_ordered st _ _ β, fun h hl => ?_, fun h hl => ?_, fun h hl => ?_,
     fun h hl => ?_, fun h hl => ?_, fun h hl x hx => ?_, fun a b ha hb hy hx => ?_,

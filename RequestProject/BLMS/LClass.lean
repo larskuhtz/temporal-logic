@@ -132,7 +132,7 @@ lemma bridgeP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ
   rw [anyRP_spec _ _ _ _ _ ρ (fun k => (toLC C).isAnd ((toLC C).bd (l + 1) + k) &&
     LC.inI (ρ vPa) (ρ vPb) ((toLC C).lo ((toLC C).bd (l + 1) + k)) &&
     LC.inI (ρ vPc) (ρ vPd) ((toLC C).hi ((toLC C).bd (l + 1) + k))) (by decide) (by decide)
-    (by decide) (by decide) (by decide) (by omega), hw]
+    (by decide) (by omega), hw]
   · rfl
   · intro p hp ρ' hfr
     rw [hw] at hp
@@ -155,7 +155,7 @@ lemma rspanP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ)
   rw [anyRP_spec _ _ _ _ _ ρ (fun k => (toLC C).isAnd ((toLC C).bd (l + 1) + k) &&
     LC.inI (ρ vPa) (ρ vPb) ((toLC C).lo ((toLC C).bd (l + 1) + k)) &&
     decide (ρ vPd ≤ (toLC C).hi ((toLC C).bd (l + 1) + k))) (by decide) (by decide)
-    (by decide) (by decide) (by decide) (by omega), hw]
+    (by decide) (by omega), hw]
   · rfl
   · intro p hp ρ' hfr
     rw [hw] at hp
@@ -168,7 +168,7 @@ lemma rspanP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ)
     simp only [eval_v, g.l, g.h, gf vPa (by decide) (by decide) (by decide),
       gf vPb (by decide) (by decide) (by decide),
       gf vPd (by decide) (by decide) (by decide), hf vPa (by decide), hf vPb (by decide),
-      hf vPd (by decide), Bool.and_assoc, not_lt, decide_not]
+      hf vPd (by decide), Bool.and_assoc]
     cases (toLC C).isAnd ((toLC C).bd (l + 1) + p) <;> simp
 
 /-! ## One step of the simulation of a pair of intervals -/
@@ -238,7 +238,7 @@ lemma decP_spec (ρ : Var → ℕ) (hK : 3 ≤ K) (b1 b2 : Bool) (u v : ℕ × �
   by_cases hu : u.1 < u.2 <;> by_cases hv : v.1 < v.2 <;> by_cases hvu : v.1 ≤ u.2 <;>
     by_cases hb2 : b2 = true <;>
     simp (config := {decide := true}) [hb1, hb2, hu, hv, hvu, PRep, min_eq_left hK1,
-      min_eq_left (show 2 ≤ K by omega), min_eq_left hK, h0, hu1, hu2, hv1, hv2] <;> omega
+      min_eq_left (show 2 ≤ K by omega), min_eq_left hK, h0, hu1, hu2, hv1, hv2]
 
 /-- `x, y := stepI vSl (ra, rb)`. -/
 def imgP (x y ra rb : Var) : Pr V :=
@@ -246,7 +246,7 @@ def imgP (x y ra rb : Var) : Pr V :=
     (.set y (.v vSo2)))))
 
 lemma imgP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ) (hG : Glob C ρ)
-    (hl : ρ vSl ≤ C.length) (x y ra rb : Var) (hxy : x ≠ y) (hy : y ≠ vSo1) (hx : vSo2 ≠ x) (hrb : rb ≠ vSa) :
+    (hl : ρ vSl ≤ C.length) (x y ra rb : Var) (hxy : x ≠ y) (hx : vSo2 ≠ x) (hrb : rb ≠ vSa) :
     st w K (imgP x y ra rb) ρ x = ((toLC C).stepI (ρ vSl) (ρ ra, ρ rb)).1 ∧
       st w K (imgP x y ra rb) ρ y = ((toLC C).stepI (ρ vSl) (ρ ra, ρ rb)).2 := by
   unfold imgP
@@ -292,14 +292,14 @@ lemma pstepP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ)
     generalize st w K rspanP ρ2 = ρ3 at x2 f3 G3
     have hl3 : ρ3 vSl = ρ vSl := by
       rw [f3 _ (by decide), f2 _ (by decide), f1 _ (by decide)]
-    obtain ⟨u1, u2⟩ := imgP_spec hE hC ρ3 G3 (by omega) vU1 vU2 vPa vPb (by decide) (by decide)
+    obtain ⟨u1, u2⟩ := imgP_spec hE hC ρ3 G3 (by omega) vU1 vU2 vPa vPb (by decide)
       (by decide) (by decide)
     have f4 : ∀ z ∉ (imgP vU1 vU2 vPa vPb).wr, st w K (imgP vU1 vU2 vPa vPb) ρ3 z = ρ3 z :=
       fun z hz => st_frame _ _ _ hz
     have G4 := G3.st (w := w) (K := K) (imgP vU1 vU2 vPa vPb) (globs_disj _ (by decide))
     generalize st w K (imgP vU1 vU2 vPa vPb) ρ3 = ρ4 at u1 u2 f4 G4
     have hl4 : ρ4 vSl = ρ vSl := by rw [f4 _ (by decide), hl3]
-    obtain ⟨v1, v2⟩ := imgP_spec hE hC ρ4 G4 (by omega) vW1 vW2 vPc vPd (by decide) (by decide)
+    obtain ⟨v1, v2⟩ := imgP_spec hE hC ρ4 G4 (by omega) vW1 vW2 vPc vPd (by decide)
       (by decide) (by decide)
     have f5 : ∀ z ∉ (imgP vW1 vW2 vPc vPd).wr, st w K (imgP vW1 vW2 vPc vPd) ρ4 z = ρ4 z :=
       fun z hz => st_frame _ _ _ hz

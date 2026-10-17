@@ -125,7 +125,7 @@ lemma mainP_output (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ
   obtain ⟨n1, n2⟩ := nextRunP_spec hE hC _ G2
   simp only [Function.update_self] at n1 n2
   have G3 := G2.st (w := w) (K := K) nextRunP (globs_disj _ (by decide))
-  have hb := LC.nextRun_le (c := toLC C) (inp := Conc.inp C) 0 (Nat.zero_le _)
+  have hb := LC.nextRun_le (c := toLC C) (inp := Conc.inp C) 0
   rw [setCode_spec hE _ G3 vEc vNa vNb (by rw [n1]; exact hb.1) (by rw [n2]; exact hb.2), n1, n2]
   set ρ4 := st w K (emitCode vEc) (st w K (setCode vEc vNa vNb)
     (st w K nextRunP (Function.update ρ1 vNd 0)))
@@ -143,7 +143,7 @@ lemma mainP_output (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ
   set ρ5 := Function.update ρ4 vM (toLC C).M
   have G5 : Glob C ρ5 := G4.upd vM (by decide) _
   have hT : (Ex.bin .add (.bin .mul (.c 3) (.v vN)) (.c 3) : Ex V).eval w K ρ5 = (toLC C).T := by
-    have : 3 * (toLC C).N + 3 ≤ K := by have := hE.K_ge; have := hE.n_le; have := hE.gts_le; nlinarith
+    have : 3 * (toLC C).N + 3 ≤ K := by have := hE.K_ge; have := length_le_gts (C := C); have := hE.gts_le; nlinarith
     simp only [eval_bin, ap_mul, ap_add, eval_v, eval_c, G5.n, LC.T,
       min_eq_left (show 3 ≤ K by omega), min_eq_left (show 3 * (toLC C).N ≤ K by omega),
       min_eq_left this]

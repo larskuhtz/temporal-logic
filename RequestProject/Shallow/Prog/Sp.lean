@@ -48,7 +48,7 @@ lemma sp_skip {ρ : Fin V → ℕ} {W : List (Fin V)} {Q : (Fin V → ℕ) → P
 lemma sp_set {y : Fin V} {e : Ex V} {ρ : Fin V → ℕ} {W : List (Fin V)}
     {Q : (Fin V → ℕ) → Prop} (hy : y ∈ W) (h : Q (Function.update ρ y (e.eval x C ρ))) :
     Sp x C (.set y e) ρ W [] Q :=
-  ⟨_, rfl, fun v hv => Function.update_of_ne (ne_of_nmem hv hy) _ _, h⟩
+  ⟨_, rfl, fun _ hv => Function.update_of_ne (ne_of_nmem hv hy) _ _, h⟩
 
 lemma sp_outToks {ts : List Tok} {ρ : Fin V → ℕ} {W : List (Fin V)} {Q : (Fin V → ℕ) → Prop}
     (h : Q ρ) : Sp x C (outToks ts) ρ W (encodeToks ts) Q :=

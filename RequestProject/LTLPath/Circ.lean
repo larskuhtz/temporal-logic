@@ -205,7 +205,7 @@ lemma gateAt_args {p i t : ℕ} (hp : p < T.N) (ht : t ≤ 1) :
     have hc2 := child2_lt_N h1.1 e2
     rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_pos e] at hj
     split_ifs at hj with h2
-    · simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hj
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at hj
       rcases hj with rfl | rfl
       · exact idx_lt_of_lt (by omega) hc.1 (by omega) (by omega)
       · exact idx_lt_of_lt hc2.1 hc2.2.1 (by omega) (by omega)
@@ -223,13 +223,13 @@ lemma gateAt_args {p i t : ℕ} (hp : p < T.N) (ht : t ≤ 1) :
     have hc2 := child2_lt_N h1.1 e2
     rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_neg (by omega)] at hj
     split_ifs at hj with h2 h3 h4
-    · simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hj
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at hj
       rcases hj with rfl | rfl
       · exact idx_lt_of_lt hc2.1 hc2.2.1 (by omega) (by omega)
       · rw [h2]; exact idx_aux_lt_main p i
     · simp only [List.mem_singleton] at hj
       rw [hj]; exact idx_lt_of_lt hc2.1 hc2.2.1 (by omega) (by omega)
-    · simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hj
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at hj
       have ht0 : t = 0 := by omega
       rcases hj with rfl | rfl
       · exact idx_lt_of_lt (by omega) hc.1 (by omega) (by omega)
@@ -279,7 +279,7 @@ theorem gate_AO {h : ℕ} (hA : AO (T.gate h)) :
     by_contra hl'
     have : T.kd p ≤ 1 := by
       have := (T.ar_kd p h1.1); simp [PT.leaf, h1.1] at hl'
-      rw [hl'] at this; split_ifs at this <;> omega
+      rw [hl'] at this; split_ifs at this; omega
     rw [if_pos h1, if_pos this] at hA; split_ifs at hA <;> simp [AO, cF] at hA
   refine ⟨hh, h1.1, hl, h1.2, fun x hx => ⟨hargs x hx, ?_⟩⟩
   have hWp := W_le_Wm (T := T) hp
@@ -315,7 +315,7 @@ theorem gate_AO {h : ℕ} (hA : AO (T.gate h)) :
     · simp [cF] at hx
   · rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_pos e'] at hx
     split_ifs at hx
-    · simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hx
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at hx
       rcases hx with hx | hx
       · exact c1 i 1 (by omega) le_rfl (by rw [ha.2.2 (Or.inl e')]; omega) hx
       · exact c2 i 1 (by omega) le_rfl (ha.2.2 (Or.inl e')) hx
@@ -330,13 +330,13 @@ theorem gate_AO {h : ℕ} (hA : AO (T.gate h)) :
   · have e2 : T.ar p = 2 := ha.2.2 (Or.inr e')
     rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_neg (by omega)] at hx
     split_ifs at hx
-    · simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hx
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at hx
       rcases hx with hx | hx
       · exact c2 i 1 (by omega) le_rfl e2 hx
       · exact c0 i 0 (by omega) (by omega) hx
     · simp only [List.mem_singleton] at hx
       exact c2 i 1 (by omega) le_rfl e2 hx
-    · simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hx
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at hx
       rcases hx with hx | hx
       · exact c1 i 1 (by omega) le_rfl (by omega) hx
       · exact c0 (i + 1) 1 (by omega) le_rfl hx
@@ -353,7 +353,7 @@ theorem gate_mono : GS.Mono T.gate := by
   split_ifs <;> first
     | exact Or.inr (Or.inr ⟨_, rfl, rfl⟩)
     | exact Or.inl rfl
-    | (rcases andOr_AO (T.pol (T.pos h)) [] with e | e <;> simp_all [andOr, AO])
+    | (rcases andOr_AO (T.pol (T.pos h)) [] with e | e <;> simp_all [andOr])
 
 end FT
 

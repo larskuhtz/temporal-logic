@@ -106,10 +106,10 @@ lemma desc_child {y z : ℕ} (h : T.Anc y z) (hne : y ≠ z) : ∃ c, T.IsChild 
 /-- Different children have disjoint leaves. -/
 lemma child_disjoint {y c c' k : ℕ} (hc : T.IsChild y c) (hc' : T.IsChild y c') (hne : c ≠ c')
     (h1 : T.Cont c k) (h2 : T.Cont c' k) : False := by
-  rcases hc with ⟨hy, ⟨_, rfl⟩ | ⟨e, rfl⟩⟩ <;> rcases hc' with ⟨_, ⟨_, rfl⟩ | ⟨e', rfl⟩⟩
+  rcases hc with ⟨-, ⟨_, rfl⟩ | ⟨_, rfl⟩⟩ <;> rcases hc' with ⟨_, ⟨_, rfl⟩ | ⟨_, rfl⟩⟩
   · exact hne rfl
-  · exact cont_c2_not_c1 hy e' ⟨h1, h2⟩
-  · exact cont_c2_not_c1 hy e ⟨h2, h1⟩
+  · exact cont_c2_not_c1 (p := y) ⟨h1, h2⟩
+  · exact cont_c2_not_c1 (p := y) ⟨h2, h1⟩
   · exact hne rfl
 
 /-- Children of a node are contained in it. -/
@@ -263,7 +263,7 @@ def Sep (S D : ℕ → Prop) : Prop :=
 
 /-- **Merge lemma.** If a child `c` of a node `y` that is alive in `S \ D` loses all its
 `S`-leaves, then `c` contains exactly one leaf `k` of `S`, `k ∈ D`, and `y = par S k`. -/
-theorem merge_dead {S D : ℕ → Prop} (hDS : ∀ k, D k → S k) (hsep : Sep S D) {y c : ℕ}
+theorem merge_dead {S D : ℕ → Prop} (hsep : Sep S D) {y c : ℕ}
     (hc : T.IsChild y c) (hy : T.alive (fun k => S k ∧ ¬ D k) y) (hcS : T.alive S c)
     (hcS' : ¬ T.alive (fun k => S k ∧ ¬ D k) c) :
     ∃ k, D k ∧ T.Cont c k ∧ (∀ k', S k' → T.Cont c k' → k' = k) ∧ T.par S k = y := by
@@ -357,7 +357,7 @@ lemma alive_merge {y c : ℕ} (hc : T.IsChild y c) (hy : T.alive (fun k => S k �
     (hP : ¬ T.PSet S D (T.down S y)) (hcS : T.alive S c) :
     T.alive (fun k => S k ∧ ¬ D k) c := by
   by_contra h
-  obtain ⟨k, hkD, hkc, -, hpar⟩ := merge_dead hDS hsep hc hy hcS h
+  obtain ⟨k, hkD, hkc, -, hpar⟩ := merge_dead hsep hc hy hcS h
   obtain ⟨k', ⟨hk'S, hk'D⟩, hk'y⟩ := hy
   have hne : k' ≠ k := by rintro rfl; exact hk'D hkD
   have := par_branch hc.1 (hc.cont hkc) hk'S hne hk'y (hDS k hkD)

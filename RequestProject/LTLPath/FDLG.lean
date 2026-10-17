@@ -245,7 +245,7 @@ lemma den_gAt {b cc h : T} {B CC H : ℕ} (hb : Den x Γ b B) (hcc : Den x Γ cc
 
 lemma den_exG {b cc : T} {B CC : ℕ} (hb : Den x Γ b B) (hcc : Den x Γ cc CC) :
     Den x Γ (exT c.Ng (gAtT c M b cc)) (bv (∃ h, L.GateAt MV B CC h)) :=
-  (den_ex hc.Ng fun k i _ => (hc.cons _).den_gAt (hM.cons _) (hb.cons _) (hcc.cons _)
+  (den_ex hc.Ng fun _ _ _ => (hc.cons _).den_gAt (hM.cons _) (hb.cons _) (hcc.cons _)
     den_var0).of_eq (bv_congr hc.ag.ex_gateAt_iff.symm)
 
 lemma den_findG {b cc : T} {B CC : ℕ} (hb : Den x Γ b B) (hcc : Den x Γ cc CC)

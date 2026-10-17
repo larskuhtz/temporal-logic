@@ -168,7 +168,7 @@ lemma run_eraseLoopP {ts : List Tok} {q : ℕ} {a : List Bool} {ρ : Fin V → �
     ∃ ρ', eraseLoopP.run (pack (encodeToks ts) q a) C ρ =
         (ρ', encodeToks (eraseToks ts (ρ vJ))) ∧ ∀ v, v ∉ eraseW → ρ' v = ρ v := by
   have hC := hE.len_le
-  obtain ⟨f1, f2⟩ := run_fendP hE (.v vJ) (by simp; omega)
+  obtain ⟨f1, f2⟩ := run_fendP hE (.v vJ)
   set ρ1 := ((fendP (.v vJ)).run (pack (encodeToks ts) q a) C ρ).1
   have g1 : ∀ v, v ∉ eraseW → ρ1 v = ρ v := fun v hv =>
     frame_of_sub (fendP_wr _) ρ v (fun h => hv (by simp [eraseW] at h ⊢; omega))

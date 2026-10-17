@@ -135,16 +135,16 @@ lemma e3Prog_output (x y : Word) :
       · -- the separator
         subst hxp
         simp only [lt_irrefl, if_false, if_true, ne_eq, one_ne_zero, not_false_eq_true]
-        rw [run_ite_pos (by simp [ev2p, zC, bitCode, e0])]
+        rw [run_ite_pos (by simp [ev2p, zC, bitCode])]
         simp only [run_seq, run_set, eval_v, eval_c, r0]
-        refine ⟨⟨by simp [e1], ?_, fun _ => by simp [r0]⟩, by simp⟩
+        refine ⟨⟨by simp [e1], ?_, fun _ => by simp⟩, by simp⟩
         simp only [Function.update_apply, show (2 : Fin 4) ≠ 3 by decide,
           show (2 : Fin 4) ≠ 1 by decide, if_false]
         rw [r2, h2, min_eq_right (by omega), min_eq_right (by omega)]
       · -- a data pair
         simp only [if_neg (show ¬ x.length < p by omega), if_true, ne_eq, one_ne_zero,
           not_false_eq_true]
-        rw [run_ite_neg (by simp [ev2p, zA p hxp, bitCode, e0])]
+        rw [run_ite_neg (by simp [ev2p, zA p hxp, bitCode])]
         rw [min_eq_left (show p ≤ x.length by omega)] at h2
         rw [min_eq_left (show p + 1 ≤ x.length by omega)]
         have hk3 : ∀ ρ'' : Fin 4 → ℕ, ρ'' 3 = ρ 3 → ρ'' 1 = ρ 1 →
@@ -260,7 +260,7 @@ lemma e3Prog_output (x y : Word) :
         by_cases hy : y.length = t.idxOf false <;> simp [hy]
   · have hkk : ρ 2 = 0 := by rw [h2]; simp [kkOf, hx, List.take_length]
     rw [run_ite_neg (by simp [hkk])]
-    simp [hx, e0]
+    simp [hx]
 
 end LL
 

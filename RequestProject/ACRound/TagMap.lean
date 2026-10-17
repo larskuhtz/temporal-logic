@@ -86,7 +86,7 @@ lemma selBody_run (z : Word) (C : ℕ) (ρ : Fin 3 → ℕ) (i : ℕ) (h0 : ρ 0
     rw [eval_inp, hP1, symNum_inputSym_succ]
   unfold selBody
   rw [run_ite]
-  simp only [eval_bin, ap_eq, hi1, eval_c, e1, e0]
+  simp only [eval_bin, ap_eq, hi1, eval_c, e1]
   by_cases ha : bitCode z[2 * i + 2]? = 1
   · simp only [ha, if_true, ne_eq, one_ne_zero, not_false_eq_true]
     rw [run_ite]
@@ -244,7 +244,7 @@ lemma selProg_output_b (b : Bool) (u v : Word) :
               if_neg (show i ≠ u.length by omega), List.getElem?_eq_getElem hv']
             cases b
             · simp [hbb]
-            · simp only [hbb, if_true]; cases v[i - u.length - 1] <;> simp [bitCode]
+            · simp only [hbb, if_true]; cases v[i - u.length - 1] <;> simp
         · simp only [if_neg hv, bitCode]
           refine ⟨⟨?_, ?_⟩, ?_⟩
           · simp [h1]

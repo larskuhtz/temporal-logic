@@ -73,7 +73,7 @@ lemma not_odd_of_dvd {r m : ℕ} (h : 2 ^ (r + 1) ∣ m) : ¬ Odd2 r m := by
   omega
 
 lemma good_S1 (r : ℕ) : T.Good r (T.S1 r) :=
-  ⟨fun m h => h.1, fun m hm hd => ⟨(good_S0 r).even m hm hd, fun h => not_odd_of_dvd hd h.2.1⟩⟩
+  ⟨fun _ h => h.1, fun m hm hd => ⟨(good_S0 r).even m hm hd, fun h => not_odd_of_dvd hd h.2.1⟩⟩
 
 /-- Arithmetic of odd multiples. -/
 lemma odd_mul {r k : ℕ} (hd : 2 ^ r ∣ k) (ho : Odd2 r k) :
@@ -114,10 +114,10 @@ lemma sep_of_odd {r : ℕ} {S D : ℕ → Prop} (hS : T.Good r S) (hD : ∀ k, D
   · rw [e1, e2]; nlinarith
 
 lemma sep_DL (r : ℕ) : Sep (T.S0 r) (T.DL r) :=
-  sep_of_odd (good_S0 r) (fun k h => ⟨h.1, h.2.1⟩)
+  sep_of_odd (good_S0 r) (fun _ h => ⟨h.1, h.2.1⟩)
 
 lemma sep_DR (r : ℕ) : Sep (T.S1 r) (T.DR r) :=
-  sep_of_odd (good_S1 r) (fun k h => ⟨h.1, h.2⟩)
+  sep_of_odd (good_S1 r) (fun _ h => ⟨h.1, h.2⟩)
 
 lemma lix_one : T.lix 1 = 0 := by
   have : T.leaf 0 = false := by

@@ -152,7 +152,7 @@ lemma live_congr {S Qd : ℕ → Prop} {st : ℕ → Option Bool} {h0 h1 : ℕ}
 
 /-- An unknown non-frontier argument of a live gate is live. -/
 lemma live_of_nf {S Qd : ℕ → Prop} {st : ℕ → Option Bool} (hck : T.ConstKnown st)
-    (hd : T.Dead S st) {h x : ℕ} (hl : T.live S Qd st h h = true) (hx : x ∈ (T.gate h).args)
+    (hd : T.Dead S st) {h x : ℕ} (hl : T.live S Qd st h h = true)
     (hnf : T.NF S (T.pos h) (T.pos x)) (hu : st x = none) :
     T.live S Qd st h x = true ∧ T.live S Qd st x = T.live S Qd st h := by
   simp only [live, decide_eq_true_eq] at hl
@@ -199,11 +199,11 @@ lemma live_kind (S Qd : ℕ → Prop) (st : ℕ → Option Bool) (h0 : ℕ) :
 
 /-- Equal answers for a live argument whose status is known after the round. -/
 lemma ans_eq_of_step {S Qd : ℕ → Prop} {st : ℕ → Option Bool} (hck : T.ConstKnown st)
-    (hd : T.Dead S st) {h x : ℕ} (hl : T.live S Qd st h h = true) (hx : x ∈ (T.gate h).args)
+    (hd : T.Dead S st) {h x : ℕ} (hl : T.live S Qd st h h = true)
     (hnf : T.NF S (T.pos h) (T.pos x)) (hu : st x = none) {v : Bool}
     (hv : T.step S Qd st x = some v) :
     GS.val (T.qsysR S Qd st h false) x = v ∧ GS.val (T.qsysR S Qd st h true) x = v := by
-  obtain ⟨-, heq⟩ := live_of_nf hck hd hl hx hnf hu
+  obtain ⟨-, heq⟩ := live_of_nf hck hd hl hnf hu
   have := dec_some hv
   unfold ans qsysR at this
   rw [heq] at this
@@ -234,7 +234,7 @@ theorem step_cl {S Qd : ℕ → Prop} {st : ℕ → Option Bool} (hck : T.ConstK
       | some b =>
         rw [step_known hsx] at hv; obtain rfl := Option.some.inj hv; exact C1 x hx hnf _ hsx
       | none =>
-        obtain ⟨e0, e1⟩ := ans_eq_of_step hck hd hl hx hnf hsx hv
+        obtain ⟨e0, e1⟩ := ans_eq_of_step hck hd hl hnf hsx hv
         by_contra hvn
         have hva : v = GS.absorb (T.gate h).kind := by
           unfold GS.absorb; revert hvn; cases v <;> cases GS.neutral (T.gate h).kind <;> simp
@@ -255,7 +255,7 @@ theorem step_cl {S Qd : ℕ → Prop} {st : ℕ → Option Bool} (hck : T.ConstK
         have := hdead x b hsx
         unfold qsysR at this; rw [this, this]
       | none =>
-        obtain ⟨e0, e1⟩ := ans_eq_of_step hck hd hl hx hnf hsx hv
+        obtain ⟨e0, e1⟩ := ans_eq_of_step hck hd hl hnf hsx hv
         unfold qsysR at e0 e1; rw [e0, e1]
   · have hstep : ∀ x ∈ (T.gate h).args, T.NF S (T.pos h) (T.pos x) →
         T.step S Qd st x = st x := by
@@ -314,7 +314,7 @@ theorem step_fcl {S Qd : ℕ → Prop} {st : ℕ → Option Bool} (hck : T.Const
       | some b =>
         rw [step_known hsx] at hv; obtain rfl := Option.some.inj hv; exact C1 x hx hnf _ hsx
       | none =>
-        obtain ⟨e0, e1⟩ := ans_eq_of_step hck hd hl hx hnf hsx hv
+        obtain ⟨e0, e1⟩ := ans_eq_of_step hck hd hl hnf hsx hv
         exact habs x hx (by simp [keep, hsx]) v e0 e1
     · rw [hfr h x hA hu hal hq hx hnf] at hv
       exact habs x hx (by simp [keep, hnf]) v (hdead x v hv false) (hdead x v hv true)
@@ -331,7 +331,7 @@ theorem step_fcl {S Qd : ℕ → Prop} {st : ℕ → Option Bool} (hck : T.Const
       unfold qsysR at this; rw [this, this]
     | none =>
       by_cases hnf : T.NF S (T.pos h) (T.pos x)
-      · obtain ⟨e0, e1⟩ := ans_eq_of_step hck hd hl hx hnf hsx hv
+      · obtain ⟨e0, e1⟩ := ans_eq_of_step hck hd hl hnf hsx hv
         unfold qsysR at e0 e1; rw [e0, e1]
       · rw [hfr h x hA hu hal hq hx hnf, hsx] at hv; exact absurd hv (by simp)
 

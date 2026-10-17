@@ -133,9 +133,11 @@ provided papers. Their data is given from memory and should be verified before r
 | --- | --- | --- |
 | Chakraborty–Datta theorem (stated, not proved) | `OIFMCVP_mem_LogDCFL` | [CD06, Theorem 1]; [KF12, Theorem 3.1] |
 | Theorem 1a, conditional on [CD06] (proved) | `LTLPathChecking_mem_AC1_LogDCFL_of_OIF` | [KF09, Theorem 1], [KF12, Theorem 1]; [Kuh10, Corollary 4] |
-| Theorem 1a (follows from the two rows above) | `LTLPathChecking_mem_AC1_LogDCFL` | as above |
+| Barrington–Lu–Miltersen–Skyum theorem (proved) | `StratMCVP_mem_LogDCFL` | [BLMS, Theorem 2, Section 5] |
+| Theorem 1a, conditional on [BLMS] (proved) | `LTLPathChecking_mem_AC1_LogDCFL_of_strat` | as above |
+| Theorem 1a (proved, from the two rows above) | `LTLPathChecking_mem_AC1_LogDCFL` | as above |
 | Theorem 1b, conditional on [CD06] (proved) | `CTLTreeChecking_mem_AC2_LogDCFL_of_OIF` | [Kuh10, Theorem 10] |
-| Theorem 1b (follows from the CD row and the row above) | `CTLTreeChecking_mem_AC2_LogDCFL` | as above |
+| Theorem 1b (proved, from the round algorithm and the unconditional Theorem 1a) | `CTLTreeChecking_mem_AC2_LogDCFL` | as above |
 | Theorem 1c (stated, not proved) | `BLTLPastPathChecking_mem_NC` | [KF12, Theorem 3]; [Kuh10, Theorem 13] |
 | MCVP is P-hard (proved) | `PHardness.MCVP_PHard` | [Lad75], [Gol77], [GHR95] |
 | Logspace reductions compose (proved) | `LogspaceComputable.comp`, `LogspaceReducible.trans` | [Jon75], [Pap94], [AB09] |

@@ -67,12 +67,12 @@ theorem circ_evalFn (h : P.SizeOk) (hwf : ∀ ℓ ≤ P.L, (P.CB ℓ).WellFormed
       rfl
   · intro r hr q hq i hi
     simp only [bitGate, Gate.evalFn]
-    simp only [map_val_qArgs hn false false i r q (by omega) (by omega), oracle_query,
+    simp only [map_val_qArgs hn false false i r q (by omega), oracle_query,
       val_bit r q i hr hq hi]
     simp
   · intro r hr q hq i hi
     simp only [lenGate, Gate.evalFn]
-    simp only [map_val_qArgs hn false true i r q (by omega) (by omega), oracle_query,
+    simp only [map_val_qArgs hn false true i r q (by omega), oracle_query,
       val_len r q i hr hq hi]
     simp
   · intro r hr q hq ℓ hℓ v hv
@@ -140,11 +140,11 @@ theorem circ_evalFn (h : P.SizeOk) (hwf : ∀ ℓ ≤ P.L, (P.CB ℓ).WellFormed
     rcases t with _ | _ | _ | t
     · simp [finalGates] at hg; subst hg
       simp only [Gate.evalFn]
-      simp only [map_val_qArgs hn true false 0 P.R 0 le_rfl (by omega), oracle_query]
+      simp only [map_val_qArgs hn true false 0 P.R 0 le_rfl, oracle_query]
       simp
     · simp [finalGates] at hg; subst hg
       simp only [Gate.evalFn]
-      simp only [map_val_qArgs hn true true 1 P.R 0 le_rfl (by omega), oracle_query]
+      simp only [map_val_qArgs hn true true 1 P.R 0 le_rfl, oracle_query]
       simp
     · simp [finalGates] at hg; subst hg
       simp only [Gate.evalFn, List.map_cons, List.map_nil, List.all_cons, List.all_nil, id,

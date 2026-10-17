@@ -87,6 +87,7 @@ lemma deno_preAU {p : T} {P : ℕ} (hp : Den x Γ p P) : DenO x Γ (preAUO p) (e
 variable (hx : x = pack (encodeToks ts) q a)
 include hx
 
+omit hx in
 lemma deno_ite_is {k : ℕ} {t : T} {V : ℕ} (ht : Den x Γ t V) {o1 o2 : TO} {w1 w2 : Word}
     (h1 : V = k → DenO x Γ o1 w1) (h2 : V ≠ k → DenO x Γ o2 w2) :
     DenO x Γ (iteO (isT k t) o1 o2) (if V = k then w1 else w2) := by
@@ -112,10 +113,10 @@ lemma deno_trBody {mm p : T} {m P : ℕ} (hm : Den x Γ mm m) (hp : Den x Γ p P
       encodeToks (if c then l1 else l2) = if c then encodeToks l1 else encodeToks l2 :=
     fun c _ l1 l2 => by split <;> rfl
   simp only [e]
-  refine deno_ite_is hx htc (fun _ => ?_) fun _ => deno_ite_is hx htc (fun _ => deno_toks _)
-    fun _ => deno_ite_is hx htc (fun _ => deno_toks _) fun _ => deno_ite_is hx htc
-    (fun _ => deno_toks _) fun _ => deno_ite_is hx htc (fun _ => deno_preEX hp)
-    fun _ => deno_ite_is hx htc (fun _ => deno_preEU) fun _ => deno_ite_is hx htc
+  refine deno_ite_is htc (fun _ => ?_) fun _ => deno_ite_is htc (fun _ => deno_toks _)
+    fun _ => deno_ite_is htc (fun _ => deno_toks _) fun _ => deno_ite_is htc
+    (fun _ => deno_toks _) fun _ => deno_ite_is htc (fun _ => deno_preEX hp)
+    fun _ => deno_ite_is htc (fun _ => deno_preEU) fun _ => deno_ite_is htc
     (fun _ => deno_preAU hp) fun _ => deno_cp hx hp
   rw [encodeToks_cons, encodeToks_replicate]
   exact deno_seq (deno_toks [Tok.tag 0] |>.of_eq (by rw [encodeToks_single]))
@@ -175,7 +176,7 @@ lemma deno_CQ (hx : x = pack (encodeToks ts) q a) (hq : q ≤ a.length) {MM mm u
   refine (deno_seq (deno_toks _) (deno_seq (deno_trC hx hm hj) (deno_seq (deno_toks _)
     (deno_seq (deno_stem hx hq hM hm hu) (deno_seq (deno_toks _) (deno_seq
       (deno_loopC hx hq hM hm hu) (deno_toks _))))))).of_eq ?_
-  simp only [CQ, encodeToks_cons, encodeToks_append, List.append_assoc, encodeToks_single]
+  simp only [CQ, encodeToks_cons, encodeToks_append, List.append_assoc]
   rfl
 
 end CTLF

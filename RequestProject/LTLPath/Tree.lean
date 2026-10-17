@@ -260,7 +260,7 @@ lemma cont_bin {p k : ℕ} (hp : T.nd p = true) (h2 : T.ar p = 2) :
     lix_mono (by rw [← hfe]; exact le_of_lt (T.lt_fe _ hc2))
   unfold Cont c2; rw [hfe]; omega
 
-lemma cont_c2_not_c1 {p k : ℕ} (hp : T.nd p = true) (h2 : T.ar p = 2) :
+lemma cont_c2_not_c1 {p k : ℕ} :
     ¬ (T.Cont (p + 1) k ∧ T.Cont (T.c2 p) k) := by
   rintro ⟨⟨_, a⟩, ⟨b, _⟩⟩
   unfold c2 at b; omega

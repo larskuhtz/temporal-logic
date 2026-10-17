@@ -96,7 +96,7 @@ lemma neg_child1 {q : ℕ} (hq : tnd ts q = true) (har : 1 ≤ tar ts q) :
     · obtain ⟨a, b, c⟩ := T.bin q hq e
       have l1 := T.lt_fe (q + 1) a
       have l2 := T.lt_fe _ b
-      simp only [PT.c2, hfe] at c l1 l2
+      simp only [hfe] at c l1 l2
       omega
   rw [negAbove_eq, negAbove_eq, countP_range_succ]
   congr 1
@@ -120,7 +120,7 @@ lemma neg_child2 {q : ℕ} (hq : tnd ts q = true) (har : tar ts q = 2) :
   obtain ⟨a, b, c⟩ := T.bin q hq har
   have l1 := T.lt_fe (q + 1) a
   have l2 := T.lt_fe _ b
-  simp only [PT.c2, hfe] at b c l1 l2
+  simp only [hfe] at b c l1 l2
   set c2 := fend ts (q + 1)
   have hk : (tkd ts q == 2) = false := by
     unfold tar at har; split_ifs at har <;> simp <;> omega

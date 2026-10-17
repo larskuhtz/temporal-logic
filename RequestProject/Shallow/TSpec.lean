@@ -68,7 +68,7 @@ lemma lc_tree : ∀ t : LTree, lc 3 t.toks = lc 4 t.toks
   | .node l cs => by
     simp only [LTree.toks, lc_cons, lc_append, lc_finset 3 (by omega), lc_finset 4 (by omega),
       lc_list cs, lc_nil, Tok.code]
-    simp only [if_pos, if_neg, Nat.reduceEqDiff]
+    simp only [if_pos, Nat.reduceEqDiff]
     omega
 lemma lc_list : ∀ cs : List LTree, lc 3 (LTree.toksList cs) = lc 4 (LTree.toksList cs)
   | [] => rfl
@@ -363,7 +363,7 @@ lemma flatMap_ite_filter {α β : Type*} (l : List α) (b : α → Bool) (f : α
     l.flatMap (fun k => if b k then f k else []) = (l.filter b).flatMap f := by
   induction l with
   | nil => rfl
-  | cons x l ih => by_cases hb : b x <;> simp [List.filter_cons, hb, ih]
+  | cons x l ih => by_cases hb : b x <;> simp [hb, ih]
 
 /-- Emission for the fresh names of a letter. -/
 def freshToks (N : ℕ) (b : ℕ → Bool) : List Tok :=

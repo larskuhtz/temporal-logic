@@ -64,7 +64,7 @@ lemma eval_okE {x : Word} {C : ℕ} {r : Fin V → ℕ} {w : Word} (hC : 5 ≤ C
     min_eq_left hC, decOK, Nat.zero_min]
   by_cases h3 : ∀ p < w.length / 5, chunk w p < 29
   · simp only [eq_true h3, if_true, and_true]
-    by_cases h1 : w.length % 5 = 0 <;> by_cases h2 : 0 < w.length / 5 <;> simp [h1, h2] <;> omega
+    by_cases h1 : w.length % 5 = 0 <;> by_cases h2 : 0 < w.length / 5 <;> simp [h1, h2]; omega
   · simp only [eq_false h3, if_false, and_false]
     simp
 

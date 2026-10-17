@@ -73,7 +73,7 @@ theorem gate_arg_shape {h x : ℕ} (hA : AO (T.gate h)) (hx : x ∈ (T.gate h).a
     · simp [cF] at hx
   · rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_pos e] at hx
     split_ifs at hx
-    · simp only [List.mem_cons, List.mem_singleton, List.not_mem_nil, or_false] at hx
+    · simp only [List.mem_cons, List.not_mem_nil, or_false] at hx
       rcases hx with hx | hx
       · obtain ⟨a, -, b, c⟩ := c1 i (by rw [ha.2.2 (Or.inl e)]; omega) (by omega) hx
         exact Or.inr ⟨a, b, by rw [c, if_neg (by omega)]; rfl, fun hk => by omega⟩

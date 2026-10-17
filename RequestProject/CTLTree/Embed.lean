@@ -72,7 +72,7 @@ lemma natToks_no6 (a : ℕ) : Tok.tag 6 ∉ natToks a := by
   cases b <;> simp at h
 
 lemma finsetToks_no6 (l : Finset ℕ) : Tok.tag 6 ∉ finsetToks l := by
-  simp only [finsetToks, List.mem_cons, List.mem_append, List.mem_flatMap, List.mem_singleton,
+  simp only [finsetToks, List.mem_cons, List.mem_append, List.mem_flatMap,
     not_or, not_exists, not_and]
   exact ⟨by decide, fun a _ h => natToks_no6 a h, by decide⟩
 
@@ -103,7 +103,7 @@ lemma tree_no6 : ∀ (n : ℕ) (t : LTree), t.toks.length ≤ n → Tok.tag 6 �
     intro t h
     obtain ⟨l, cs⟩ := t
     have hlen := node_len l cs
-    simp only [LTree.toks, List.mem_cons, List.mem_append, List.mem_singleton, not_or]
+    simp only [LTree.toks, List.mem_cons, List.mem_append, not_or]
     refine ⟨by decide, ⟨finsetToks_no6 l, fun hm => ?_⟩, by decide⟩
     obtain ⟨c, hc, hm'⟩ := mem_toksList hm
     have := len_le_toksList hc

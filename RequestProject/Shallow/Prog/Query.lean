@@ -96,8 +96,7 @@ lemma sp_tailP (hE : Env ts q a C ρ) (hu : ρ vU ≤ ts.length) (hr : ρ vR0 �
     min_eq_left (show cnt ts 3 (ρ vR0) (ρ vU - ρ vR0) + 1 ≤ C by omega)]
   by_cases hl : isLeaf ts (ρ vU) = true <;>
     by_cases hd : ρ vD + cnt ts 4 (ρ vR0) (ρ vU - ρ vR0) ≤ cnt ts 3 (ρ vR0) (ρ vU - ρ vR0) <;>
-    simp only [hl, hd, Bool.true_or, Bool.false_or, decide_true, decide_false, if_true,
-      if_false] <;> split_ifs <;> omega
+    simp only [hl, hd, Bool.true_or, Bool.false_or, decide_true, decide_false, if_true] <;> split_ifs <;> omega
 
 /-- The query program. -/
 def queryP : Pr V := .seq tailP (.ite (.v vTc)

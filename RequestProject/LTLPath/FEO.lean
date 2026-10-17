@@ -136,7 +136,7 @@ section Correct
 
 variable {w : Word} {C : ℕ}
 
-lemma bound_env {ρ : Fin (V + 1) → ℕ} {ρ' : Fin (V + 1) → ℕ} {δ : ℕ → ℕ} {d : ℕ} (hdV : d ≤ V)
+lemma bound_env {ρ : Fin (V + 1) → ℕ} {ρ' : Fin (V + 1) → ℕ} {δ : ℕ → ℕ} {d : ℕ}
     (h : ∀ x < d, envOf ρ x ≤ (w.length + 2) ^ δ x) (hfr : ∀ z, z < d → ρ' (fv V z) = ρ (fv V z)) :
     ∀ x < d, envOf ρ' x ≤ (w.length + 2) ^ δ x := by
   intro x hx
@@ -184,7 +184,7 @@ theorem run_compO (hC : 2 ≤ C) (SB : ℕ) : ∀ (o : O) (d sp : ℕ) (ρ : Fin
       ((pow_mono hX (le_max_left _ _)).trans hC')
     set ρ1 := ((compO V a d sp).run w C ρ).1
     have hρ1 : ∀ x < d, envOf ρ1 x ≤ (w.length + 2) ^ δ x :=
-      bound_env (by omega) hρ (fun z hz => a2 z (by omega) (Or.inl hz))
+      bound_env hρ (fun z hz => a2 z (by omega) (Or.inl hz))
     obtain ⟨b1, b2⟩ := ihb d sp ρ1 δ hw.2 (by omega) hSB (by omega) hρ1
       ((pow_mono hX (le_max_right _ _)).trans hC')
     simp only [compO, run_seq, evO]
@@ -202,7 +202,7 @@ theorem run_compO (hC : 2 ≤ C) (SB : ℕ) : ∀ (o : O) (d sp : ℕ) (ρ : Fin
       ((pow_mono hX (le_max_left _ _)).trans hC')).1
     set ρ1 := ((comp V c d sp (sp + 1)).run w C ρ).1
     have hρ1 : ∀ x < d, envOf ρ1 x ≤ (w.length + 2) ^ δ x :=
-      bound_env (by omega) hρ (fun z hz => c3 z (by omega) (Or.inl hz) (by omega))
+      bound_env hρ (fun z hz => c3 z (by omega) (Or.inl hz) (by omega))
     have key : ∀ x < d, envOf ρ1 x = envOf ρ x := fun x hx => c3 x (by omega) (Or.inl hx) (by omega)
     simp only [compO, run_seq, c1, List.nil_append, evO]
     rw [run_ite]

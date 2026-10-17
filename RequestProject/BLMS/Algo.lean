@@ -184,7 +184,7 @@ lemma dec_code {p : ℕ × ℕ} (h : p.2 ≤ c.N) : c.dec (c.code p) = p := by
   rw [h1, h2]
 
 /-- The properties of `nextRun`. -/
-lemma nextRun_spec {d : ℕ} (hd : d ≤ c.N) :
+lemma nextRun_spec {d : ℕ} :
     let r := c.nextRun inp d
     r.2 ≤ c.N ∧ (r.2 = c.N ∨ inp r.2 = false) ∧
     (r = c.vR ∨ ((d ≤ r.1 ∧ (inp d = false → d < r.1)) ∧ r.1 < r.2)) ∧
@@ -311,7 +311,7 @@ lemma discard_top (hP : c.Planar) {K : ℕ × ℕ} {stk : List (ℕ × ℕ)} {J 
 
 lemma Y_out_mono_J {stk : List (ℕ × ℕ)} {J : ℕ × ℕ} (h : c.out (Ico J.1 J.2)) :
     c.out (c.Y inp stk J) :=
-  out_mono (fun x hx => Or.inl (Or.inr hx)) h
+  out_mono (fun _ hx => Or.inl (Or.inr hx)) h
 
 /-- Pushing the current interval. -/
 lemma inv_push {stk : List (ℕ × ℕ)} {J : ℕ × ℕ} (hI : Inv c inp stk J) (hJ : J.1 < J.2)
@@ -319,7 +319,7 @@ lemma inv_push {stk : List (ℕ × ℕ)} {J : ℕ × ℕ} (hI : Inv c inp stk J)
     (hp : stk = [] ∨ ∃ K stk', stk = K :: stk' ∧ ∃ e < c.D, c.PushData (Ico K.1 K.2) (Ico J.1 J.2) e) :
     Inv c inp (J :: stk) (c.nextRun inp J.2) ∧
       c.pot (J :: stk) (c.nextRun inp J.2) < c.pot stk J := by
-  obtain ⟨r1, r2, r3, r4⟩ := nextRun_spec (c := c) (inp := inp) hI.jle
+  obtain ⟨r1, r2, r3, r4⟩ := nextRun_spec (c := c) (inp := inp) (d := J.2)
   set r := c.nextRun inp J.2
   have hbelow : ∀ K ∈ stk, K.2 < J.1 := by
     rcases hs : stk with _ | ⟨H, t⟩
@@ -560,7 +560,7 @@ lemma mrun_spec (hP : c.Planar) : ∀ k (stk : List (ℕ × ℕ)) (J : ℕ × �
 
 /-- The initial state satisfies the invariant. -/
 lemma inv_init : Inv c inp [] (c.nextRun inp 0) ∧ c.pot [] (c.nextRun inp 0) ≤ 3 * c.N + 2 := by
-  obtain ⟨r1, r2, r3, r4⟩ := nextRun_spec (c := c) (inp := inp) (Nat.zero_le _)
+  obtain ⟨r1, r2, r3, r4⟩ := nextRun_spec (c := c) (inp := inp) (d := 0)
   refine ⟨⟨r1, r2, r3.imp id (fun h => h.2), fun K hK => by simp at hK, List.Pairwise.nil,
     List.isChain_nil, fun _ K hK => by simp at hK, ?_⟩, ?_⟩
   · have : c.Y inp [] (c.nextRun inp 0) = c.X0 inp := by

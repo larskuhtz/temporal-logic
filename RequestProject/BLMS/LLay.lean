@@ -49,7 +49,7 @@ abbrev vBi : Var := 39
 variable {C : Circuit} {w : Word} {K : ℕ}
 
 lemma Env.nK (hE : Env C w K) : C.length + 2 ≤ K := by
-  have := hE.n_le; have := hE.gts_le; have := hE.lenK; omega
+  have := length_le_gts (C := C); have := hE.gts_le; have := hE.lenK; omega
 
 /-! ## The chain of first arguments -/
 

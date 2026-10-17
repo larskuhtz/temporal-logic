@@ -41,7 +41,7 @@ variable {ρ : Var → ℕ} {a b x : Ex V} {p q : Bool}
 lemma eval_andB (ha : a.eval w K ρ = p.toNat) (hb : b.eval w K ρ = q.toNat) (hK : 1 ≤ K) :
     (andB a b).eval w K ρ = (p && q).toNat := by
   simp only [andB, eval_bin, ap_mul, ha, hb]
-  cases p <;> cases q <;> simp <;> omega
+  cases p <;> cases q <;> simp; omega
 
 lemma eval_orB (ha : a.eval w K ρ = p.toNat) (hb : b.eval w K ρ = q.toNat) (hK : 1 ≤ K) :
     (orB a b).eval w K ρ = (p || q).toNat := by
@@ -62,7 +62,7 @@ lemma eval_inIE (hK : 1 ≤ K) :
   simp only [LC.inI]
   congr 1
   by_cases h1 : x.eval w K ρ < a.eval w K ρ <;> by_cases h2 : x.eval w K ρ < b.eval w K ρ <;>
-    simp [h1, h2] <;> omega
+    simp [h1, h2]; omega
 
 end
 

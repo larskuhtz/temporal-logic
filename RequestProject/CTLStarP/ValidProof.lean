@@ -200,7 +200,7 @@ lemma labSuf_eq (q : ℕ) : labSuf ts q =
     else if tc ts q = 4 then true
     else numOK ts q && (tc ts (numEnd ts q) == 4 || numLt ts q (numEnd ts q)) &&
       labSuf ts (numEnd ts q) := by
-  rw [labSuf]; simp only [dite_eq_ite]
+  rw [labSuf]
 
 lemma natToks_head_code (a : ℕ) : ∃ t l, natToks a = t :: l ∧ t.code ≤ 2 := by
   obtain ⟨l, hl | hl | hl⟩ := natToks_head a

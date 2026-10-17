@@ -71,7 +71,7 @@ lemma ach_divR (x y q f s₁ s₂ s₃ : Fin K)
   have h31 := h13.symm
   have h32 := h23.symm
   refine ach_seq (ach_clear q _ _ ?_)
-  refine ach_seq (ach_flagGe x y f s₁ s₂ s₃ hxy hxf hx1 hx2 hx3 hyf hy1 hy2 hy3 hf1 hf2 hf3
+  refine ach_seq (ach_flagGe x y f s₁ s₂ s₃ hx1 hx2 hx3 hyf hy1 hy2 hy3 hf1 hf2 hf3
     h12 h13 h23 _ _ (by simp [St.setReg_apply, *])
     (by simp [St.setReg_apply, *]) hB1 ?_)
   intro σ₁ hp1 ho1 hf1' hfr1
@@ -94,7 +94,7 @@ lemma ach_divR (x y q f s₁ s₂ s₃ : Fin K)
         have : m * (σ.reg y) ≤ (σ.reg x) := by omega
         have : m ≤ m * (σ.reg y) := Nat.le_mul_of_pos_right _ (by omega)
         omega
-      refine ach_flagGe x y f s₁ s₂ s₃ hxy hxf hx1 hx2 hx3 hyf hy1 hy2 hy3 hf1 hf2 hf3
+      refine ach_flagGe x y f s₁ s₂ s₃ hx1 hx2 hx3 hyf hy1 hy2 hy3 hf1 hf2 hf3
         h12 h13 h23 _ _ ?_ ?_ hB1 ?_
       · simp [St.setReg_apply, *]; omega
       · simp [St.setReg_apply, *]

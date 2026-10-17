@@ -176,13 +176,13 @@ lemma sfxProg_output (x : Word) : sfxProg.output 2 x = sfxF x := by
           · simp only [bitCode, if_true, ne_eq, one_ne_zero, not_false_eq_true, run_set]
             refine ⟨?_, ?_⟩
             · simp [hmem.2 (Or.inr hx), min_eq_left (show 1 ≤ C by omega)]
-            · simp [hs]
+            · simp
           · simp only [bitCode, Nat.one_ne_zero, if_false, ne_eq, not_true_eq_false, run_skip]
             refine ⟨?_, ?_⟩
             · simp only [e1] at *
               rw [h1, if_neg hs, if_neg]
               rw [hmem]; simp [hs, hx]
-            · simp [hs])
+            · simp)
   rw [h.2]
   simp only [eval_len]
   rw [min_eq_left (by omega)]

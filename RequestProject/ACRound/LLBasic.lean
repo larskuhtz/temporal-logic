@@ -44,7 +44,7 @@ lemma flatMap_range_getD {α β : Type*} (x : List α) (g : α → List β) (d :
   | cons a x ih =>
     rw [List.length_cons, List.range_succ_eq_map, List.flatMap_cons, List.flatMap_map,
       List.flatMap_cons, ← ih]
-    simp [Function.comp_def]
+    simp
 
 /-! ## Bit maps -/
 
@@ -111,7 +111,7 @@ lemma tailProg_output (x : Word) : tailProg.output 2 x = x.tail := by
   rcases x with _ | ⟨a, x⟩
   · rfl
   · rw [List.length_cons, List.range_succ_eq_map, List.flatMap_cons, List.flatMap_map]
-    simp only [if_true, List.nil_append, Function.comp_def, Nat.succ_ne_zero, if_false,
+    simp only [if_true, List.nil_append, Nat.succ_ne_zero, if_false,
       List.getElem?_cons_succ, List.tail_cons]
     rw [flatMap_range_getD x (fun b => [b]) false, LS.flatMap_single]
 

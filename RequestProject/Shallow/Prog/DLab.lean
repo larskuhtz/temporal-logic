@@ -105,7 +105,7 @@ lemma sp_labSufP (hE : Env ts q a C ρ) (p : Ex V)
         have h1Q : r1 lQ = r lQ := h1f lQ (by decide)
         simp only [eval_v] at h1R
         -- its end
-        refine sp_seqE (o1 := []) (o2 := []) ((sp_numEndP hE1 (.v lQ) (by simp; omega)).frame.mono
+        refine sp_seqE (o1 := []) (o2 := []) ((sp_numEndP hE1 (.v lQ)).frame.mono
           (W' := labW) (by decide) (fun _ _ h => h)) (fun r2 _ h2 => ?_) rfl
         obtain ⟨h2R, h2f⟩ := h2
         have hE2' : Env ts q a C r2 := hE1.of_frame h2f (by decide) (by decide)

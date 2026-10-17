@@ -77,7 +77,7 @@ theorem QP_tail {r₀ d m N u ℓ j : ℕ} (A : ℕ → ℕ → ℕ → Bool) {s
 /-- Correctness of the branching query. -/
 theorem QP_branch {r₀ d m N u ℓ j : ℕ} (A : ℕ → ℕ → ℕ → Bool) {l : Finset ℕ}
     {cs : List LTree} {R : List Tok} (hu : ts.drop u = (LTree.node l cs).toks ++ R)
-    (hcs : cs ≠ []) (htail : tailCond ts r₀ d u = false) (hN : N + 1 < 2 ^ m)
+    (htail : tailCond ts r₀ d u = false) (hN : N + 1 < 2 ^ m)
     (hNt : ts.length ≤ N)
     (hA : ∀ ℓ' k (ψ : CTLStar) Rk, (ℓ' = ℓ ∨ (u ≤ ℓ' ∧ ℓ' < u + (LTree.node l cs).toks.length)) →
       ts.drop k = ψ.toks ++ Rk →
@@ -136,7 +136,7 @@ theorem QP_branch {r₀ d m N u ℓ j : ℕ} (A : ℕ → ℕ → ℕ → Bool) 
       ts.drop k = ψ.toks ++ Rk → (k + 1 ∈ Ls[i] ↔ CTLStar.Holds ψ (fun t => ps[i] (t + 1))) := by
     intro i h1 h2 k ψ Rk hk
     have hkN : k < N := lt_of_lt_of_le (lt_length_of_drop hk) hNt
-    simp only [hLs, hps, List.getElem_map, hF]
+    simp only [hLs, List.getElem_map, hF]
     rw [mem_letterList_fresh m N hN _ _ k hkN,
       hA _ k ψ Rk (hPs_mem _ (List.getElem_mem _)) hk]
     have hpi : ps[i] = pathOf ts u (Ps[i]'(by simpa [hps] using h2)) := by simp [hps]
@@ -159,12 +159,7 @@ theorem QP_correct {r₀ d m N u ℓ j : ℕ} (A : ℕ → ℕ → ℕ → Bool)
   | true => exact QP_tail A hu (htl htc) htc hj
   | false =>
     obtain ⟨l, cs⟩ := s
-    cases cs with
-    | nil =>
-      exfalso
-      have : isLeaf ts u = true := (isLeaf_iff hu).2 rfl
-      simp [tailCond, this] at htc
-    | cons c cs => exact QP_branch A hu (by simp) htc hN hNt (hA htc) hj
+    exact QP_branch A hu htc hN hNt (hA htc) hj
 
 end ShallowP
 

@@ -96,7 +96,7 @@ lemma enc_drop_tP (h : Enc ts φ p) : ts.drop (tP ts) = p.toks := by
 
 lemma enc_tc_tF (h : Enc ts φ p) : tc ts (tF ts) = 4 := by
   have : ts.drop (tF ts) = Tok.rpar :: p.toks := by
-    rw [enc_tF h, h]; simp [show 1 + φ.toks.length = φ.toks.length + 1 by omega, List.drop_append]
+    rw [enc_tF h, h]; simp [show 1 + φ.toks.length = φ.toks.length + 1 by omega]
   rw [tc_of_drop this]; rfl
 
 /-- Tokens of a list of letters. -/

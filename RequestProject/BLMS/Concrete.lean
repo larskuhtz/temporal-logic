@@ -88,6 +88,7 @@ section Layering
 variable {lay : ℕ → ℕ} (hW : C.WellFormed 0) (hM : C.MonotoneFanin2) (hL : C.StratLayering lay)
 include hW hM hL
 
+omit hM in
 lemma isC_iff {j : ℕ} (hj : j < C.length) : isC C j = true ↔ lay j = 0 := by
   rw [← hL.input_iff j hj]
   have hw := (hW.2 j hj).2
@@ -95,21 +96,24 @@ lemma isC_iff {j : ℕ} (hj : j < C.length) : isC C j = true ↔ lay j = 0 := by
     Gate.IsInput]
   rcases hk : C[j].kind with k | b | _ | _ | _ | _ <;> simp_all
 
+omit hW in
 lemma args_ne {j : ℕ} (hj : j < C.length) (h : lay j ≠ 0) :
     (C[j].kind = .and ∨ C[j].kind = .or) ∧ 1 ≤ C[j].args.length ∧ C[j].args.length ≤ 2 := by
   rcases hM C[j] (List.getElem_mem hj) with ⟨b, hb, -⟩ | h'
   · exact absurd ((hL.input_iff j hj).1 (by simp [Gate.IsInput, hb])) h
   · exact h'
 
+omit hW in
 lemma lo_mem {j : ℕ} (hj : j < C.length) (h : lay j ≠ 0) : lo C j ∈ C[j].args := by
-  obtain ⟨-, h1, -⟩ := args_ne hW hM hL hj h
+  obtain ⟨-, h1, -⟩ := args_ne hM hL hj h
   simp only [lo, hj, dif_pos]
   rcases hh : C[j].args with _ | ⟨a, l⟩
   · simp [hh] at h1
   · simp
 
+omit hW in
 lemma hi_mem {j : ℕ} (hj : j < C.length) (h : lay j ≠ 0) : hi C j ∈ C[j].args := by
-  obtain ⟨-, h1, -⟩ := args_ne hW hM hL hj h
+  obtain ⟨-, h1, -⟩ := args_ne hM hL hj h
   simp only [hi, hj, dif_pos]
   rw [List.getLastD_eq_getLast?]
   rcases hh : C[j].args.getLast? with _ | a
@@ -123,7 +127,7 @@ lemma lay_le : ∀ j, j < C.length → lay j ≤ j := by
     intro hj
     by_cases h : lay j = 0
     · omega
-    · have hm := lo_mem hW hM hL hj h
+    · have hm := lo_mem hM hL hj h
       have h1 := (hW.2 j hj).1 _ hm
       have h2 := hL.args_prev j hj _ hm
       have := ih _ h1 (by omega)
@@ -141,7 +145,7 @@ lemma chain_iter : ∀ k j c, j < C.length → lay j ≤ k →
     intro j c hj hk
     rw [Function.iterate_succ_apply]
     by_cases h : lay j = 0
-    · have hc : isC C j = true := (isC_iff hW hM hL hj).2 h
+    · have hc : isC C j = true := (isC_iff hW hL hj).2 h
       have hfix : ∀ m, (chG C)^[m] (j, c) = (j, c) := by
         intro m
         induction m with
@@ -150,10 +154,10 @@ lemma chain_iter : ∀ k j c, j < C.length → lay j ≤ k →
       have e : chG C (j, c) = (j, c) := by simp [chG, hc]
       rw [e, hfix, h]; rfl
     · have hc : isC C j = false := by
-        have := (isC_iff hW hM hL hj).not.2 h; simpa using this
+        have := (isC_iff hW hL hj).not.2 h; simpa using this
       have e : chG C (j, c) = (lo C j, c + 1) := by simp [chG, hc]
       rw [e]
-      have hm := lo_mem hW hM hL hj h
+      have hm := lo_mem hM hL hj h
       have h1 := (hW.2 j hj).1 _ hm
       have h2 := hL.args_prev j hj _ hm
       rw [ih (lo C j) (c + 1) (by omega) (by omega)]
@@ -170,6 +174,7 @@ lemma dep_eq {j : ℕ} (hj : j < C.length) : dep C j = lay j := by
 /-- Values of the gates of `C`. -/
 noncomputable def val (C : Circuit) (j : ℕ) : Bool := (C.values ∅ []).getD j false
 
+omit hM hL in
 lemma val_spec {j : ℕ} (hj : j < C.length) : val C j = C[j].evalFn ∅ [] (val C) := by
   have ht : (C.values ∅ []).take j = (List.range j).map (val C) := by
     apply List.ext_getElem
@@ -182,20 +187,23 @@ lemma val_spec {j : ℕ} (hj : j < C.length) : val C j = C[j].evalFn ∅ [] (val
     Circuit.values_getElem _ _ _ _ hj, ht, Gate.eval_range_map _ _ _ _ _ ((hW.2 j hj).1)]
   rfl
 
+omit hM in
 lemma val_const {j : ℕ} (hj : j < C.length) (h : lay j = 0) :
     ∃ b, C[j].kind = .const b ∧ val C j = b := by
-  have hc := (isC_iff hW hM hL hj).2 h
+  have hc := (isC_iff hW hL hj).2 h
   simp only [isC, List.getElem?_eq_getElem hj, Option.map_some, Option.getD_some,
     kindConst] at hc
   rcases hk : C[j].kind with k | b | _ | _ | _ | _ <;> rw [hk] at hc <;> try simp at hc
-  exact ⟨b, rfl, by rw [val_spec hW hM hL hj]; simp [Gate.evalFn, hk]⟩
+  exact ⟨b, rfl, by rw [val_spec hW hj]; simp [Gate.evalFn, hk]⟩
 
+omit hM hL in
 lemma ne_nil : C ≠ [] := hW.1
 
+omit hM hL in
 lemma len_pos : 0 < C.length := List.length_pos_of_ne_nil hW.1
 
 lemma top_eq : top C = lay (C.length - 1) := by
-  have := len_pos hW hM hL
+  have := len_pos hW
   exact dep_eq hW hM hL (by omega)
 
 lemma lyr_lt {i : ℕ} (hi : i < C.length) : lyr C i = lay i := by
@@ -204,8 +212,9 @@ lemma lyr_lt {i : ℕ} (hi : i < C.length) : lyr C i = lay i := by
 lemma lyr_n : lyr C C.length = lay (C.length - 1) + 1 := by
   simp [lyr, top_eq hW hM hL]
 
+omit hM in
 lemma lay_le_top {i : ℕ} (hi : i < C.length) : lay i ≤ lay (C.length - 1) :=
-  hL.mono _ _ (by omega) (by have := len_pos hW hM hL; omega)
+  hL.mono _ _ (by omega) (by have := len_pos hW; omega)
 
 lemma lyr_mono {i j : ℕ} (hij : i ≤ j) (hj : j < C.length + 1) : lyr C i ≤ lyr C j := by
   rcases Nat.lt_or_ge j C.length with h | h
@@ -215,7 +224,7 @@ lemma lyr_mono {i j : ℕ} (hij : i ≤ j) (hj : j < C.length + 1) : lyr C i ≤
     subst this
     rcases Nat.lt_or_ge i C.length with h' | h'
     · rw [lyr_lt hW hM hL h', lyr_n hW hM hL]
-      have := lay_le_top hW hM hL h'
+      have := lay_le_top hW hL h'
       omega
     · have : i = C.length := by omega
       subst this; rfl
@@ -282,7 +291,7 @@ lemma mem_gates_top {i : ℕ} : i ∈ (toLC C).gates (lay (C.length - 1)) ↔ i 
   constructor
   · rintro ⟨hi, h⟩
     rcases Nat.lt_or_ge i C.length with h' | h'
-    · rw [lyr_lt hW hM hL h'] at h; have := lay_le_top hW hM hL h'; omega
+    · rw [lyr_lt hW hM hL h'] at h; have := lay_le_top hW hL h'; omega
     · omega
   · rintro rfl; exact ⟨by omega, lyr_n hW hM hL⟩
 
@@ -305,10 +314,10 @@ lemma lt_N_iff (i : ℕ) : i < (toLC C).N ↔ i < C.length ∧ lay i = 0 := by
 lemma gval_iff {i : ℕ} (hiC : i < C.length) (h0 : lay i ≠ 0) {S : Set ℕ}
     (hS : ∀ a ∈ C[i].args, (a ∈ S ↔ val C a = true)) :
     (toLC C).gval S i ↔ val C i = true := by
-  obtain ⟨hk, h1, h2⟩ := args_ne hW hM hL hiC h0
-  rw [val_spec hW hM hL hiC]
-  have hlo := lo_mem hW hM hL hiC h0
-  have hhi := hi_mem hW hM hL hiC h0
+  obtain ⟨hk, h1, h2⟩ := args_ne hM hL hiC h0
+  rw [val_spec hW hiC]
+  have hlo := lo_mem hM hL hiC h0
+  have hhi := hi_mem hM hL hiC h0
   simp only [LC.gval, toLC, hiC, dif_pos]
   simp only [lo, Conc.hi, hiC, dif_pos] at hlo hhi ⊢
   rw [hS _ hlo, hS _ hhi]
@@ -328,13 +337,13 @@ lemma ev_eq : ∀ l ≤ lay (C.length - 1),
     simp only [LC.ev_zero, LC.X0, mem_setOf_eq, lt_N_iff hW hM hL]
     constructor
     · rintro ⟨⟨hp, h0⟩, hi⟩
-      obtain ⟨b, hb, hv⟩ := val_const hW hM hL hp h0
+      obtain ⟨b, hb, hv⟩ := val_const hW hL hp h0
       refine ⟨hp, h0, ?_⟩
       simp only [inp, List.getElem?_eq_getElem hp, Option.map_some, Option.getD_some,
         kindTrue, hb] at hi
       cases b <;> simp_all
     · rintro ⟨hp, h0, hv⟩
-      obtain ⟨b, hb, hv'⟩ := val_const hW hM hL hp h0
+      obtain ⟨b, hb, hv'⟩ := val_const hW hL hp h0
       refine ⟨⟨hp, h0⟩, ?_⟩
       simp only [inp, List.getElem?_eq_getElem hp, Option.map_some, Option.getD_some,
         kindTrue, hb]
@@ -363,7 +372,7 @@ lemma ev_eq : ∀ l ≤ lay (C.length - 1),
       · exact fun h => ⟨by omega, by omega, h⟩
 
 lemma out_iff : (toLC C).out ((toLC C).X0 (inp C)) ↔ C.eval ∅ [] = true := by
-  have hn := len_pos hW hM hL
+  have hn := len_pos hW
   have hD : (toLC C).D = lay (C.length - 1) + 1 := by
     show top C + 1 = _; rw [top_eq hW hM hL]
   unfold LC.out
@@ -414,12 +423,12 @@ lemma planar : (toLC C).Planar := by
       subst this
       rw [lyr_n hW hM hL] at hi'
       rw [lyr_lt hW hM hL hin] at hi
-      have := lay_le_top hW hM hL hin
+      have := lay_le_top hW hL hin
       omega
     rw [lyr_lt hW hM hL hin] at hi
     rw [lyr_lt hW hM hL hi'n] at hi'
-    exact hL.planar i i' hin hi'n hii' (by omega) _ (hi_mem hW hM hL hin (by omega)) _
-      (lo_mem hW hM hL hi'n (by omega))
+    exact hL.planar i i' hin hi'n hii' (by omega) _ (hi_mem hM hL hin (by omega)) _
+      (lo_mem hM hL hi'n (by omega))
 
 end Layering
 

@@ -167,7 +167,7 @@ lemma emb₁_step {c : P₁.Cfg} {d : (tagDPDA P₁ P₂).Cfg} (h : (tagDPDA P�
     (emb₁ P₁ P₂ c) d) : ∃ c', P₁.Step c c' ∧ d = emb₁ P₁ P₂ c' := by
   obtain ⟨q, w, γ⟩ := c
   rcases γ with _ | ⟨Z, γ⟩
-  · cases h <;> simp_all [emb₁]
+  · cases h
   · cases h with
     | read hδ =>
       rename_i a w q' α
@@ -192,7 +192,7 @@ lemma emb₂_step {c : P₂.Cfg} {d : (tagDPDA P₁ P₂).Cfg} (h : (tagDPDA P�
     (emb₂ P₁ P₂ c) d) : ∃ c', P₂.Step c c' ∧ d = emb₂ P₁ P₂ c' := by
   obtain ⟨q, w, γ⟩ := c
   rcases γ with _ | ⟨Z, γ⟩
-  · cases h <;> simp_all [emb₂]
+  · cases h
   · cases h with
     | read hδ =>
       rename_i a w q' α

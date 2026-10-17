@@ -116,6 +116,7 @@ variable {F : ℕ} (hFn : F < ts.length) (hF4 : tc ts F = 4)
   (hR : ∀ j, 1 ≤ j → j < F → RF (tc ts (j - 1)) (tc ts j))
 include hFn hF4 hFe hR
 
+omit hF4 in
 /-- **Parsing the formula part.** -/
 theorem form_parse : ∀ m j c, F - j = m → 1 ≤ j → 1 ≤ c → scan ts upF downF j c = F →
     ¬ (tc ts (j - 1) ≤ 1 ∨ tc ts (j - 1) = 5) →

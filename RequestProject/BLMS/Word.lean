@@ -62,8 +62,8 @@ lemma dec_le {k : ℕ} (hk : k < c.M) : (c.dec k).1 ≤ c.N ∧ (c.dec k).2 ≤ 
   simp only
   omega
 
-lemma nextRun_le (d : ℕ) (hd : d ≤ c.N) : (c.nextRun inp d).1 ≤ c.N ∧ (c.nextRun inp d).2 ≤ c.N := by
-  obtain ⟨h1, -, h3, -⟩ := nextRun_spec (c := c) (inp := inp) hd
+lemma nextRun_le (d : ℕ) : (c.nextRun inp d).1 ≤ c.N ∧ (c.nextRun inp d).2 ≤ c.N := by
+  obtain ⟨h1, -, h3, -⟩ := nextRun_spec (c := c) (inp := inp) (d := d)
   rcases h3 with h | h
   · rw [h]; simp [vR]
   · exact ⟨by omega, h1⟩
@@ -82,7 +82,7 @@ lemma tab_lt (cI cJ : ℕ) (hI : cI < c.M) (hJ : cJ < c.M) (s : List ℕ)
     subst hk
     exact code_lt (p := ((c.dec cI).1, (c.dec cJ).2)) dI.1 dJ.2
   · cases hs
-    have := nextRun_le (c := c) (inp := inp) _ dJ.2
+    have := nextRun_le (c := c) (inp := inp) (c.dec cJ).2
     intro k hk
     simp only [List.mem_cons, List.not_mem_nil, or_false] at hk
     rcases hk with rfl | rfl | rfl
@@ -97,7 +97,7 @@ theorem specWord_accepts (hP : c.Planar) : PD.pda.Accepts (c.specWord inp) ↔ c
   obtain ⟨ha, hr⟩ := mrun_correct (c := c) (inp := inp) hP hT
   have hcfg : c.cfg [] (c.nextRun inp 0) = [c.code (c.nextRun inp 0), c.code vL] := rfl
   rw [hcfg, mrun_eq] at ha hr
-  have hb := nextRun_le (c := c) (inp := inp) 0 (Nat.zero_le _)
+  have hb := nextRun_le (c := c) (inp := inp) 0
   have h := PD.accepts_iff (c.tab inp) c.M (tab_lt (c := c) (inp := inp))
     (a := c.code vL) (b := c.code (c.nextRun inp 0)) (code_lt (by simp [vL]) (by simp [vL]))
     (code_lt hb.1 hb.2) c.T (by

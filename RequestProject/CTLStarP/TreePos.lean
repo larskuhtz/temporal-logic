@@ -141,7 +141,7 @@ lemma sub_eq {p : ℕ} {s : LTree} {rest : List Tok} (h : ts.drop p = s.toks ++ 
 lemma ctw_eq (c ℓ : ℕ) : ctw ts c ℓ =
     if ts.length ≤ c then c
     else if tend ts c ≤ ℓ ∧ tc ts (tend ts c) ≠ 4 then ctw ts (tend ts c) ℓ else c := by
-  rw [ctw]; simp only [dite_eq_ite]
+  rw [ctw]
 
 lemma ctw_mem (cs : List LTree) : ∀ {c : ℕ} {R : List Tok} (ℓ : ℕ), cs ≠ [] →
     ts.drop c = LTree.toksList cs ++ Tok.rpar :: R →
@@ -271,7 +271,7 @@ lemma labHas_eq (p q : ℕ) : labHas ts p q =
     if ts.length ≤ p then false
     else if tc ts p = 4 then false
     else numEq ts p q || labHas ts (numEnd ts p) q := by
-  rw [labHas]; simp only [dite_eq_ite]
+  rw [labHas]
 
 lemma labHas_correct (xs : List ℕ) : ∀ {p : ℕ} {R : List Tok},
     ts.drop p = xs.flatMap natToks ++ Tok.rpar :: R → ∀ {q a : ℕ} {r : List Tok},

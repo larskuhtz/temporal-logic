@@ -145,11 +145,10 @@ lemma udN : ∀ k, ¬ (upN k = true ∧ downN k = true) := by
 /-- `sR := numEnd e` -/
 def numEndP (e : Ex V) : Pr V := scanP cUN cDN e 1
 
-lemma sp_numEndP (hE : Env ts q a C ρ) (e : Ex V)
-    (he : e.eval (pack (encodeToks ts) q a) C ρ ≤ ts.length + 1) :
+lemma sp_numEndP (hE : Env ts q a C ρ) (e : Ex V) :
     Sp (pack (encodeToks ts) q a) C (numEndP e) ρ scanW []
       (fun ρ' => ρ' sR = numEnd ts (e.eval (pack (encodeToks ts) q a) C ρ)) := by
-  obtain ⟨h1, h2, -⟩ := run_scanP cUN cDN udN e 1 (by omega) hE he
+  obtain ⟨h1, h2, -⟩ := run_scanP cUN cDN udN e 1 (by omega) hE
   refine sp_of_silent h2 (fun z hz => ?_) h1
   rcases scanP_wr _ _ _ _ z hz with h | h | h | h | h <;> simp [h]
 

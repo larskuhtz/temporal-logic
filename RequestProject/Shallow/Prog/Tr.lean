@@ -89,7 +89,7 @@ lemma sp_secUP (hE : Env ts q a C ρ) (hx : ρ vX3 ≤ ts.length) :
             (pack (encodeToks ts) q a) C (Function.update ρ' vI3 k) = ρ vJ + k + 1 := by
           simp only [eval_bin, ap_add, eval_v, eval_c, g vJ (by decide), Function.update_self]
           simp (disch := omega) only [min_eq_left]
-        refine sp_seqE (o1 := []) (o2 := []) ((sp_fendP hE' _ (by rw [hp1]; omega)).frame.mono
+        refine sp_seqE (o1 := []) (o2 := []) ((sp_fendP hE' _).frame.mono
           (by decide) (fun _ _ h => h)) (fun ρ2 _ h2 => ?_) rfl
         rw [hp1] at h2
         have hX2 : ρ2 vX3 = ρ vX3 := by rw [h2.2 vX3 (by decide), g vX3 (by decide)]
@@ -285,7 +285,7 @@ lemma sp_trLoopP (hE : Env ts q a C ρ) (hj : ρ vJ ≤ ts.length) :
   have hC := hE.len_le
   unfold trLoopP
   refine sp_seqE (o2 := encodeToks (trToks ts (ρ vM) (ρ vJ)))
-    ((sp_fendP hE (.v vJ) (by simp only [eval_v]; omega)).mono (by decide) (fun _ _ h => h))
+    ((sp_fendP hE (.v vJ)).mono (by decide) (fun _ _ h => h))
     (fun ρ1 f1 h1 => ?_) (by simp)
   simp only [eval_v] at h1
   have hJ1 : ρ1 vJ = ρ vJ := f1 _ (by decide)

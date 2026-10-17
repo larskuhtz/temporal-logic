@@ -48,7 +48,7 @@ def cUF : CodePred upF where
     simp only [eval_bin, ap_eq, ap_lt, ap_add, eval_c, upF, Bool.or_eq_true, beq_iff_eq]
     rw [min_eq_left (show 8 ≤ C by omega), min_eq_left (show 10 ≤ C by omega),
       min_eq_left (show 0 ≤ C by omega)]
-    split_ifs <;> simp_all <;> omega
+    split_ifs <;> simp_all
 
 /-- `k ∈ {2, 6}` -/
 def cDF : CodePred downF where
@@ -57,7 +57,7 @@ def cDF : CodePred downF where
     simp only [eval_bin, ap_eq, ap_lt, ap_add, eval_c, downF, Bool.or_eq_true, beq_iff_eq]
     rw [min_eq_left (show 2 ≤ C by omega), min_eq_left (show 6 ≤ C by omega),
       min_eq_left (show 0 ≤ C by omega)]
-    split_ifs <;> simp_all <;> omega
+    split_ifs <;> simp_all
 
 lemma udT : ∀ k, ¬ (upT k = true ∧ downT k = true) := by
   intro k; simp only [upT, downT, beq_iff_eq]; omega
@@ -83,20 +83,18 @@ section
 
 variable {ts : List Tok} {q : ℕ} {a : List Bool} {ρ : Fin V → ℕ}
 
-theorem run_tendP (hE : Env ts q a C ρ) (e : Ex V)
-    (he : e.eval (pack (encodeToks ts) q a) C ρ ≤ ts.length + 1) :
+theorem run_tendP (hE : Env ts q a C ρ) (e : Ex V) :
     ((tendP e).run (pack (encodeToks ts) q a) C ρ).1 sR =
       tend ts (e.eval (pack (encodeToks ts) q a) C ρ) ∧
     ((tendP e).run (pack (encodeToks ts) q a) C ρ).2 = [] := by
-  obtain ⟨h1, h2, -⟩ := run_scanP cUT cDT udT e 0 (by omega) hE he
+  obtain ⟨h1, h2, -⟩ := run_scanP cUT cDT udT e 0 (by omega) hE
   exact ⟨h1, h2⟩
 
-theorem run_fendP (hE : Env ts q a C ρ) (e : Ex V)
-    (he : e.eval (pack (encodeToks ts) q a) C ρ ≤ ts.length + 1) :
+theorem run_fendP (hE : Env ts q a C ρ) (e : Ex V) :
     ((fendP e).run (pack (encodeToks ts) q a) C ρ).1 sR =
       fend ts (e.eval (pack (encodeToks ts) q a) C ρ) ∧
     ((fendP e).run (pack (encodeToks ts) q a) C ρ).2 = [] := by
-  obtain ⟨h1, h2, -⟩ := run_scanP cUF cDF udF e 1 (by omega) hE he
+  obtain ⟨h1, h2, -⟩ := run_scanP cUF cDF udF e 1 (by omega) hE
   exact ⟨h1, h2⟩
 
 end
@@ -128,7 +126,7 @@ theorem run_isLeafP {ts : List Tok} {q : ℕ} {a : List Bool} {ρ : Fin V → �
   set x := pack (encodeToks ts) q a
   have hev : (Ex.bin .add e (.c 1) : Ex V).eval x C ρ = e.eval x C ρ + 1 := by
     simp only [eval_bin, ap_add, eval_c]; rw [min_eq_left (by omega), min_eq_left (by omega)]
-  obtain ⟨h1, h2⟩ := run_tendP hE (.bin .add e (.c 1)) (by rw [hev]; omega)
+  obtain ⟨h1, h2⟩ := run_tendP hE (.bin .add e (.c 1))
   set ρ1 := ((tendP (.bin .add e (.c 1))).run x C ρ).1
   have hE1 : Env ts q a C ρ1 := hE.congr (frame_of_sub (tendP_wr _) _ _ (by decide))
     (frame_of_sub (tendP_wr _) _ _ (by decide))
@@ -299,7 +297,7 @@ theorem run_ctwP {ts : List Tok} {q : ℕ} {a : List Bool} {ρ : Fin V → ℕ}
       · rw [ctwBody, run_ite_neg (by simp [e6, hd])]
         by_cases hlt : ρ' wC < ts.length
         · rw [run_ite_pos (by simp [e7, e4, hE.hL, hlt])]
-          obtain ⟨h1, h2⟩ := run_tendP hE'' (.v wC) (by simp [e7]; omega)
+          obtain ⟨h1, h2⟩ := run_tendP hE'' (.v wC)
           set ρ3 := ((tendP (.v wC)).run x C ρ'').1
           have f : ∀ z ∉ scanW, ρ3 z = ρ'' z := fun z hz => frame_of_sub (tendP_wr _) _ z hz
           have hE3 : Env ts q a C ρ3 := hE''.congr (f _ (by decide)) (f _ (by decide))
@@ -316,7 +314,7 @@ theorem run_ctwP {ts : List Tok} {q : ℕ} {a : List Bool} {ρ : Fin V → ℕ}
                 (.bin .eq (.bin .eq (tokE (.v sR)) (.c 4)) (.c 0))) : Ex V).eval x C ρ3 ≠ 0 := by
             simp only [eval_bin, ap_lt, ap_mul, ap_eq, eval_c, eval_v, htok, hl3, h1]
             rw [min_eq_left (show 0 ≤ C by omega), min_eq_left (show 4 ≤ C by omega)]
-            split_ifs <;> simp_all <;> omega
+            split_ifs <;> simp_all
           have hctw := ctw_eq (ts := ts) (ρ' wC) lv
           rw [if_neg (by omega)] at hctw
           rw [run_seq]

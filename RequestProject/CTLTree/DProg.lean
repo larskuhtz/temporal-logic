@@ -120,7 +120,7 @@ lemma deno_hProg (hx : x = pack (encodeToks ts) q a) :
         else cbits (tc ts i)).length true = if tc ts i = 11 then
         List.replicate (cbits 11 ++ cbits 8).length true
         else List.replicate (cbits (tc ts i)).length true by split <;> rfl]
-    refine deno_ite_is hx (den_tc hx den_var0) (fun h => ?_) (fun h => ?_)
+    refine deno_ite_is (den_tc hx den_var0) (fun h => ?_) (fun h => ?_)
     · refine (deno_rep (den_c 10) fun _ _ => deno_bit (den_c 1)).of_eq ?_
       simp [cbits]
       decide
@@ -128,7 +128,7 @@ lemma deno_hProg (hx : x = pack (encodeToks ts) q a) :
       simp [cbits]
       decide
   · rw [hTW_eq hi]
-    refine deno_ite_is hx (den_tc hx den_var0) (fun h => ?_) (fun h => ?_)
+    refine deno_ite_is (den_tc hx den_var0) (fun h => ?_) (fun h => ?_)
     · exact deno_seq (deno_tok (den_c 11)) (deno_tok (den_c 8))
     · exact deno_tok (den_tc hx den_var0)
 

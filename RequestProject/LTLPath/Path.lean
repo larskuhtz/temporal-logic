@@ -80,7 +80,7 @@ lemma cnt_seg {q : ℕ} {l rest : List Tok} (h : ts.drop q = l ++ rest) (c : ℕ
   induction k with
   | zero => simp [cnt_self]
   | succ k ih =>
-    rw [← Nat.add_assoc, cnt_succ c (by omega), ih (by omega), List.take_succ,
+    rw [← Nat.add_assoc, cnt_succ c (by omega), ih (by omega), List.take_add_one,
       List.countP_append, tc_seg h (by omega), List.getElem?_eq_getElem (by omega)]
     simp
 

@@ -233,6 +233,7 @@ lemma node_sub {p : ℕ} (hp : tnd ts p = true) :
   · omega
   · exact h
 
+omit hφ in
 lemma tnd_of_at {p : ℕ} {ψ : LTL} (h : At ts p ψ) (h1 : 1 ≤ p) (h2 : p < tF ts) :
     tnd ts p = true := by
   simp only [tnd, decide_eq_true_eq]; exact ⟨h1, h2, by rw [tc_at h]; omega⟩
@@ -243,7 +244,7 @@ def tokPT : PT where
   nd := tnd ts
   ar := tar ts
   fe := fend ts
-  nd_one := tnd_of_at hφ hφ le_rfl (by rw [tF_eq hφ]; have := φ.toks_pos; omega)
+  nd_one := tnd_of_at hφ le_rfl (by rw [tF_eq hφ]; have := φ.toks_pos; omega)
   fe_one := rfl
   nd_ge := fun p hp => by simp only [tnd, decide_eq_true_eq] at hp; exact hp.1
   lt_fe := fun p hp => by
@@ -265,7 +266,7 @@ def tokPT : PT where
       have := tc_le_two_of_natToks (drop_succ_of_drop h) (q := q) (by omega) (by omega)
       simp only [tnd, decide_eq_false_iff_not]; omega
     | tt => simp [LTL.toks] at hqf; omega
-    | _ => simp [LTL.tag] at hk; split_ifs at har <;> omega
+    | _ => simp [LTL.tag] at hk; split_ifs at har; omega
   un := fun p hp har => by
     obtain ⟨ψ, h1, h2⟩ := node_sub hφ hp
     have hk := tkd_at h1
@@ -277,7 +278,7 @@ def tokPT : PT where
       simp only [LTL.toks, List.cons_append, List.length_cons] at h h2
       have hc : At ts (p + 1) χ := ⟨_, drop_succ_of_drop h⟩
       have := χ.toks_pos
-      refine ⟨tnd_of_at hφ hc (by omega) (by omega), ?_⟩
+      refine ⟨tnd_of_at hc (by omega) (by omega), ?_⟩
       rw [fend_at hc, fend_at h1']; simp [LTL.toks]; omega
     | X χ =>
       have h1' := h1
@@ -285,7 +286,7 @@ def tokPT : PT where
       simp only [LTL.toks, List.cons_append, List.length_cons] at h h2
       have hc : At ts (p + 1) χ := ⟨_, drop_succ_of_drop h⟩
       have := χ.toks_pos
-      refine ⟨tnd_of_at hφ hc (by omega) (by omega), ?_⟩
+      refine ⟨tnd_of_at hc (by omega) (by omega), ?_⟩
       rw [fend_at hc, fend_at h1']; simp [LTL.toks]; omega
     | _ => simp [LTL.tag] at hk; split_ifs at har <;> omega
   bin := fun p hp har => by
@@ -302,8 +303,8 @@ def tokPT : PT where
       have hc2 : At ts (p + 1 + χ1.toks.length) χ2 :=
         ⟨_, drop_append_of_drop (drop_succ_of_drop h)⟩
       have := χ1.toks_pos; have := χ2.toks_pos
-      refine ⟨tnd_of_at hφ hc1 (by omega) (by omega), ?_, ?_⟩
-      · rw [fend_at hc1]; exact tnd_of_at hφ hc2 (by omega) (by omega)
+      refine ⟨tnd_of_at hc1 (by omega) (by omega), ?_, ?_⟩
+      · rw [fend_at hc1]; exact tnd_of_at hc2 (by omega) (by omega)
       · rw [fend_at hc1, fend_at hc2, fend_at h1']
         simp [LTL.toks]; omega
     | U χ1 χ2 =>
@@ -315,8 +316,8 @@ def tokPT : PT where
       have hc2 : At ts (p + 1 + χ1.toks.length) χ2 :=
         ⟨_, drop_append_of_drop (drop_succ_of_drop h)⟩
       have := χ1.toks_pos; have := χ2.toks_pos
-      refine ⟨tnd_of_at hφ hc1 (by omega) (by omega), ?_, ?_⟩
-      · rw [fend_at hc1]; exact tnd_of_at hφ hc2 (by omega) (by omega)
+      refine ⟨tnd_of_at hc1 (by omega) (by omega), ?_, ?_⟩
+      · rw [fend_at hc1]; exact tnd_of_at hc2 (by omega) (by omega)
       · rw [fend_at hc1, fend_at hc2, fend_at h1']
         simp [LTL.toks]; omega
     | _ => simp [LTL.tag] at hk; split_ifs at har <;> omega

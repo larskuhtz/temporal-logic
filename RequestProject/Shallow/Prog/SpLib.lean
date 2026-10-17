@@ -34,18 +34,16 @@ lemma tend_le' (ts : List Tok) {p : ℕ} (hp : p ≤ ts.length) : tend ts p ≤ 
 lemma fend_le' (ts : List Tok) {p : ℕ} (hp : p ≤ ts.length) : fend ts p ≤ ts.length :=
   (scan_le _ _ _ _).trans (by omega)
 
-lemma sp_tendP (hE : Env ts q a C ρ) (e : Ex V)
-    (he : e.eval (pack (encodeToks ts) q a) C ρ ≤ ts.length + 1) :
+lemma sp_tendP (hE : Env ts q a C ρ) (e : Ex V) :
     Sp (pack (encodeToks ts) q a) C (tendP e) ρ scanW []
       (fun ρ' => ρ' sR = tend ts (e.eval (pack (encodeToks ts) q a) C ρ)) := by
-  obtain ⟨h1, h2⟩ := run_tendP hE e he
+  obtain ⟨h1, h2⟩ := run_tendP hE e
   exact sp_of_silent h2 (tendP_wr e) h1
 
-lemma sp_fendP (hE : Env ts q a C ρ) (e : Ex V)
-    (he : e.eval (pack (encodeToks ts) q a) C ρ ≤ ts.length + 1) :
+lemma sp_fendP (hE : Env ts q a C ρ) (e : Ex V) :
     Sp (pack (encodeToks ts) q a) C (fendP e) ρ scanW []
       (fun ρ' => ρ' sR = fend ts (e.eval (pack (encodeToks ts) q a) C ρ)) := by
-  obtain ⟨h1, h2⟩ := run_fendP hE e he
+  obtain ⟨h1, h2⟩ := run_fendP hE e
   exact sp_of_silent h2 (fendP_wr e) h1
 
 lemma sp_isLeafP (hE : Env ts q a C ρ) (e : Ex V)

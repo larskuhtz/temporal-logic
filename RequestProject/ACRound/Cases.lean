@@ -72,10 +72,10 @@ theorem circ_cases (h : P.SizeOk) (Pr : ℕ → Gate → Prop)
     intro g hg hp
     rw [getElem_of_getElem?_eq hi (hget.trans hg)]; exact hp
   by_cases t1 : t < P.L + 1
-  · exact key _ (groupGates_get_bit h r q t (by omega)) (hi_eq ▸ hbit r hrR q hqN t (by omega))
+  · exact key _ (groupGates_get_bit r q t (by omega)) (hi_eq ▸ hbit r hrR q hqN t (by omega))
   by_cases t2 : t < 2 * (P.L + 1)
   · obtain ⟨j, rfl⟩ : ∃ j, t = P.L + 1 + j := ⟨t - (P.L + 1), by omega⟩
-    refine key _ (groupGates_get_len h r q j (by omega)) ?_
+    refine key _ (groupGates_get_len r q j (by omega)) ?_
     rw [hi_eq, ← Nat.add_assoc]; exact hlen r hrR q hqN j (by omega)
   have hWdef : P.W = 2 * (P.L + 1) + (P.L + 1) * P.S + 1 := rfl
   by_cases t3 : t < P.W - 1
@@ -99,7 +99,7 @@ theorem circ_cases (h : P.SizeOk) (Pr : ℕ → Gate → Prop)
     · refine key _ (hgb.trans (blockGates_get_copy r q ℓ v v1)) ?_
       rw [hib]; exact hcopy r hrR q hqN ℓ hℓL v v1
     by_cases v2 : v + 1 < P.S
-    · refine key _ (hgb.trans (blockGates_get_pad h r q ℓ v hℓL (by omega) v2)) ?_
+    · refine key _ (hgb.trans (blockGates_get_pad r q ℓ v (by omega) v2)) ?_
       rw [hib]; exact hpad r hrR q hqN ℓ hℓL v (by omega) v2
     · have hv' : v = P.S - 1 := by omega
       rw [hv'] at hgb hib

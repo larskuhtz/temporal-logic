@@ -211,7 +211,7 @@ lemma firstFP_spec (r i nb : Var) (body : Pr V) (pred : Ex V) (ρ : Var → ℕ)
       rw [hb] at hp
       have hfr' : ∀ z, z ∉ body.wr → z ≠ r → z ≠ i → ρ' z = ρ z := by
         intro z h1 h2 h3
-        rw [hfr z (by simp [Pr.wr, h1, h2, h3, Ne.symm h3, Ne.symm h2])]
+        rw [hfr z (by simp [Pr.wr, h1, h2, h3])]
         exact Function.update_of_ne h2 _ _
       have hnb : ρ' nb = ρ nb := hfr' nb hbnb hrnb.symm hinb.symm
       simp only [st_seq]
@@ -242,7 +242,7 @@ def anyRP (r i nb : Var) (body : Pr V) (pred : Ex V) : Pr V :=
   .seq (.set r (.c 0)) (.loop i (.v nb) (.seq body (.ite pred (.set r (.c 1)) .skip)))
 
 lemma anyRP_spec (r i nb : Var) (body : Pr V) (pred : Ex V) (ρ : Var → ℕ) (P : ℕ → Bool)
-    (hri : r ≠ i) (hrnb : r ≠ nb) (hinb : i ≠ nb) (hbr : r ∉ body.wr) (hbnb : nb ∉ body.wr)
+    (hri : r ≠ i) (hrnb : r ≠ nb) (hbr : r ∉ body.wr)
     (hK : 1 ≤ K)
     (hP : ∀ p < ρ nb, ∀ ρ', (∀ z, z ∉ body.wr → z ≠ r → z ≠ i → ρ' z = ρ z) →
       ((pred.eval w K (st w K body (Function.update ρ' i p)) ≠ 0) ↔ P p = true)) :
@@ -259,7 +259,7 @@ lemma anyRP_spec (r i nb : Var) (body : Pr V) (pred : Ex V) (ρ : Var → ℕ) (
       rw [hb] at hp
       have hfr' : ∀ z, z ∉ body.wr → z ≠ r → z ≠ i → ρ' z = ρ z := by
         intro z h1 h2 h3
-        rw [hfr z (by simp [Pr.wr, h1, h2, h3, Ne.symm h3, Ne.symm h2])]
+        rw [hfr z (by simp [Pr.wr, h1, h2, h3])]
         exact Function.update_of_ne h2 _ _
       simp only [st_seq]
       have h2r : st w K body (Function.update ρ' i p) r = a.toNat := by

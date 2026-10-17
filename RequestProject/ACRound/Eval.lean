@@ -28,7 +28,7 @@ lemma Circuit.values_getD_evalFn (B : Language) (x : Word) (C : Circuit) (v : �
     Circuit.values_getElem B x C v hv]
   refine Gate.eval_eq_evalFn _ _ _ _ _ fun j hj => ?_
   have := hargs j hj
-  simp [List.getD_eq_getElem?_getD, List.getElem?_take, this]
+  simp [List.getD_eq_getElem?_getD, this]
 
 lemma roundAns_length (B : Language) (Q : Word → Word) (Nq : ℕ) (w : Word) (r : ℕ) :
     (roundAns B Q Nq w r).length = Nq := by
@@ -136,7 +136,7 @@ lemma val_ans (r q : ℕ) (hr : r ≤ P.R) (hq : q < P.Nq) :
     rw [if_neg (by omega), if_neg (by omega), if_neg (by omega)]
     simp [roundAns, hq]
 
-lemma map_val_packArgs (hn : P.n = w.length) (r q : ℕ) (hr : r ≤ P.R) (hq : q ≤ P.Nq) :
+lemma map_val_packArgs (hn : P.n = w.length) (r q : ℕ) (hr : r ≤ P.R) :
     (P.packArgs r q).map (P.val B Bc Q D w) = pack w q (roundAns B Q P.Nq w r) := by
   have h2 := P0_ge (P := P)
   have v0 : P.val B Bc Q D w 0 = false := by simp [val]
@@ -160,15 +160,14 @@ lemma map_val_packArgs (hn : P.n = w.length) (r q : ℕ) (hr : r ≤ P.R) (hq : 
   simp only [List.map_append, List.map_replicate, List.map_cons, List.map_nil, e1, e2, v0, v1,
     roundAns_length, ← hn]
 
-lemma map_val_qArgs (hn : P.n = w.length) (t b : Bool) (i r q : ℕ) (hr : r ≤ P.R)
-    (hq : q ≤ P.Nq) :
+lemma map_val_qArgs (hn : P.n = w.length) (t b : Bool) (i r q : ℕ) (hr : r ≤ P.R) :
     (P.qArgs t b i r q).map (P.val B Bc Q D w) =
       true :: t :: b :: (List.replicate i true ++ false :: pack w q (roundAns B Q P.Nq w r)) := by
   have v0 : P.val B Bc Q D w 0 = false := by simp [val]
   have v1 : P.val B Bc Q D w 1 = true := by simp [val]
   have vb : ∀ c, P.val B Bc Q D w (bitIdx c) = c := fun c => by cases c <;> simp [bitIdx, v0, v1]
   unfold qArgs
-  simp [vb, v0, v1, map_val_packArgs hn r q hr hq]
+  simp [vb, v0, v1, map_val_packArgs hn r q hr]
 
 lemma oracle_query (t b : Bool) (i : ℕ) (u : Word) :
     decide ((true :: t :: b :: (List.replicate i true ++ false :: u)) ∈
@@ -176,7 +175,7 @@ lemma oracle_query (t b : Bool) (i : ℕ) (u : Word) :
       if t then (if b then decide ((D u).length = i) else (D u).getD i false)
       else (if b then decide ((Q u).length = i) else (Q u).getD i false) := by
   rw [Bool.eq_iff_iff]
-  simp only [decide_eq_true_iff, cons_mem_tagU, if_true, mem_LangF]
+  simp only [decide_eq_true_iff, cons_mem_tagU, if_true]
   cases t <;> cases b <;> simp [mem_LangF, List.getD_eq_getElem?_getD]
 
 /-- Copies of gates of `CB ℓ` compute the same values as the originals. -/

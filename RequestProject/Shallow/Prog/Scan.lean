@@ -76,8 +76,7 @@ lemma cstep_le (up down : ℕ → Bool) (k c : ℕ) : cstep up down k c ≤ c + 
 /-- **Correctness of the scan.** -/
 theorem run_scanP {up down : ℕ → Bool} (U : CodePred up) (D : CodePred down)
     (hud : ∀ k, ¬ (up k = true ∧ down k = true)) (p : Ex V) (c : ℕ) (hc : c ≤ 2)
-    {ts : List Tok} {q : ℕ} {a : List Bool} {C : ℕ} {ρ : Fin V → ℕ} (hE : Env ts q a C ρ)
-    (hp : p.eval (pack (encodeToks ts) q a) C ρ ≤ ts.length + 1) :
+    {ts : List Tok} {q : ℕ} {a : List Bool} {C : ℕ} {ρ : Fin V → ℕ} (hE : Env ts q a C ρ) :
     ((scanP U D p c).run (pack (encodeToks ts) q a) C ρ).1 sR =
       scan ts up down (p.eval (pack (encodeToks ts) q a) C ρ) c
     ∧ ((scanP U D p c).run (pack (encodeToks ts) q a) C ρ).2 = [] ∧
@@ -105,13 +104,13 @@ theorem run_scanP {up down : ℕ → Bool} (U : CodePred up) (D : CodePred down)
     ((ρ' sD = 1 ∧ ρ' sR = S) ∨ (ρ' sD = 0 ∧ ρ' sP = pv + i ∧ (i = 0 ∨ ρ' sP ≤ L) ∧
       ρ' sC ≤ c + i ∧ scan ts up down (ρ' sP) (ρ' sC) = S))
   have hb : (Ex.bin .add (.v vL) (.c 2) : Ex V).eval x C ρ1 = L + 2 := by
-    simp (config := {decide := true}) [ρ1, Function.update_apply, hE.hL]; omega
+    simp (config := {decide := true}) [ρ1, hE.hL]; omega
   have key := run_loop_inv (w := x) (C := C) sI (.bin .add (.v vL) (.c 2)) body ρ1 I
     (by
-      refine ⟨by simp (config := {decide := true}) [ρ1, Function.update_apply], by simp (config := {decide := true}) [ρ1, Function.update_apply], ?_⟩
+      refine ⟨by simp (config := {decide := true}) [ρ1], by simp (config := {decide := true}) [ρ1], ?_⟩
       right
       simp (config := {decide := true}) only [ρ1, Function.update_apply]
-      simp (config := {decide := true}) (disch := omega) [min_eq_left, S])
+      simp (config := {decide := true}) (disch := omega) [S])
     (by
       intro i hi ρ' hI
       obtain ⟨hIN, hIL, hI⟩ := hI
@@ -145,29 +144,29 @@ theorem run_scanP {up down : ℕ → Bool} (U : CodePred up) (D : CodePred down)
           by_cases hk0 : k' = 0
           · rw [run_ite_pos (by simp [hk0])]
             simp only [run_seq, run_set]
-            refine ⟨by simp (config := {decide := true}) [Function.update_apply, e'' vN (by decide), hIN],
-              by simp (config := {decide := true}) [Function.update_apply, e'' vL (by decide), hIL], Or.inl ⟨by simp; omega, ?_⟩⟩
+            refine ⟨by simp (config := {decide := true}) [e'' vN (by decide), hIN],
+              by simp (config := {decide := true}) [e'' vL (by decide), hIL], Or.inl ⟨by simp; omega, ?_⟩⟩
             simp (config := {decide := true}) only [Function.update_apply]
-            simp (disch := first | decide | omega) [Function.update_of_ne, Function.update_self, min_eq_left, hsP]
+            simp (disch := first | decide | omega) [Function.update_of_ne, hsP]
             rw [← hsc, scan_eq, if_neg (by omega), if_pos hk0]
           · rw [run_ite_neg (by simp [hk0])]
             simp only [run_set]
-            refine ⟨by simp (config := {decide := true}) [Function.update_apply, e'' vN (by decide), hIN],
-              by simp (config := {decide := true}) [Function.update_apply, e'' vL (by decide), hIL], Or.inr ⟨?_, ?_, ?_, ?_, ?_⟩⟩
-            · simp (config := {decide := true}) [Function.update_apply, e'' sD (by decide), hd]
+            refine ⟨by simp (config := {decide := true}) [e'' vN (by decide), hIN],
+              by simp (config := {decide := true}) [e'' vL (by decide), hIL], Or.inr ⟨?_, ?_, ?_, ?_, ?_⟩⟩
+            · simp (config := {decide := true}) [e'' sD (by decide), hd]
             · simp (config := {decide := true}) only [Function.update_apply]
-              simp (disch := first | decide | omega) [Function.update_of_ne, Function.update_self, min_eq_left, hsP]; omega
+              simp (disch := first | decide | omega) [Function.update_of_ne, hsP]; omega
             · right; simp (config := {decide := true}) only [Function.update_apply]
-              simp (disch := first | decide | omega) [Function.update_of_ne, Function.update_self, min_eq_left, hsP]; omega
+              simp (disch := first | decide | omega) [Function.update_of_ne, hsP]; omega
             · simp (config := {decide := true}) only [Function.update_apply]; simp; omega
             · simp (config := {decide := true}) only [Function.update_apply]
-              simp (disch := first | decide | omega) [Function.update_of_ne, Function.update_self, min_eq_left, hsP]
+              simp (disch := first | decide | omega) [Function.update_of_ne, hsP]
               rw [← hsc, scan_eq (p := ρ' sP), if_neg (by omega), if_neg hk0]
         · rw [run_ite_pos (by simp [hsP, hvL, hlt])]
           simp only [run_seq, run_set]
-          refine ⟨by simp (config := {decide := true}) [Function.update_apply, e'' vN (by decide), hIN],
-            by simp (config := {decide := true}) [Function.update_apply, e'' vL (by decide), hIL], Or.inl ⟨by simp; omega, ?_⟩⟩
-          simp (config := {decide := true}) [Function.update_apply, hsP]
+          refine ⟨by simp (config := {decide := true}) [e'' vN (by decide), hIN],
+            by simp (config := {decide := true}) [e'' vL (by decide), hIL], Or.inl ⟨by simp; omega, ?_⟩⟩
+          simp (config := {decide := true}) [hsP]
           rw [← hsc, scan_eq, if_pos (by omega)])
   rw [hb] at key
   obtain ⟨-, -, key⟩ := key

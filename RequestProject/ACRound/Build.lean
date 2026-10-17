@@ -246,13 +246,13 @@ lemma circ_get_final (h : P.SizeOk) (t : ℕ) (ht : t < 3) :
   congr 1; omega
 
 /-- Local indexing in a group. -/
-lemma groupGates_get_bit (h : P.SizeOk) (r q i : ℕ) (hi : i ≤ P.L) :
+lemma groupGates_get_bit (r q i : ℕ) (hi : i ≤ P.L) :
     (P.groupGates r q)[i]? = some (P.bitGate r q i) := by
   unfold groupGates
   rw [List.append_assoc, List.append_assoc, List.getElem?_append_left (by simp; omega)]
   simp [List.getElem?_map, List.getElem?_range (by omega : i < P.L + 1)]
 
-lemma groupGates_get_len (h : P.SizeOk) (r q i : ℕ) (hi : i ≤ P.L) :
+lemma groupGates_get_len (r q i : ℕ) (hi : i ≤ P.L) :
     (P.groupGates r q)[P.L + 1 + i]? = some (P.lenGate r q i) := by
   unfold groupGates
   rw [List.append_assoc, List.append_assoc, List.getElem?_append_right (by simp),
@@ -286,7 +286,7 @@ lemma blockGates_get_copy (r q ℓ v : ℕ) (hv : v < (P.CB ℓ).length) :
   rw [List.append_assoc, List.getElem?_append_left (by simpa using hv)]
   simp [hv]
 
-lemma blockGates_get_pad (h : P.SizeOk) (r q ℓ v : ℕ) (hℓ : ℓ ≤ P.L)
+lemma blockGates_get_pad (r q ℓ v : ℕ)
     (hv1 : (P.CB ℓ).length ≤ v) (hv2 : v + 1 < P.S) :
     (P.blockGates r q ℓ)[v]? = some ⟨.const false, []⟩ := by
   unfold blockGates

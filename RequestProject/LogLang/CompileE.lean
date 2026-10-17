@@ -105,7 +105,7 @@ theorem ach_opG (o : BOp) (t b c : ℕ) (σ : St (K + 1)) (Q : St (K + 1) → Pr
     refine h σ' (by simp [hp]) (by simp [ho]) ?_ ?_
     · rw [hv]; rs [BOp.ap]
     · intro i hi hit
-      rw [hfr _ (by simp (disch := omega) [R_eq_iff] <;> omega)]
+      rw [hfr _ (by simp (disch := omega) [R_eq_iff]; omega)]
       rs
   | sub =>
     refine ach_seq (ach_subR _ _ (R_ne (by omega) (by omega) (by omega)) _ _ (ach_seq
@@ -128,12 +128,12 @@ theorem ach_opG (o : BOp) (t b c : ℕ) (σ : St (K + 1)) (Q : St (K + 1) → Pr
     refine h σ' (by simp [hp]) (by simp [ho]) ?_ ?_
     · rw [hv]; rs [BOp.ap]
     · intro i hi hit
-      rw [hfr _ (by simp (disch := omega) [R_eq_iff] <;> omega)]
+      rw [hfr _ (by simp (disch := omega) [R_eq_iff]; omega)]
       rs
   | div =>
     refine ach_seq (ach_divR _ _ _ _ _ _ _
-      (nodup_R (L := [b, b + 1, b + 2, b + 3, b + 4, b + 5, b + 6]) (by simp <;> omega)
-        (by simp <;> omega)) _ _ (ha.trans hCB) (hb.trans hCB) (by omega) ?_)
+      (nodup_R (L := [b, b + 1, b + 2, b + 3, b + 4, b + 5, b + 6]) (by simp; omega)
+        (by simp)) _ _ (ha.trans hCB) (hb.trans hCB) (by omega) ?_)
     intro σ' hp ho hq hx hfr
     have hdiv : σ.reg (R K b) / σ.reg (R K (b + 1)) ≤ B :=
       (Nat.div_le_self _ _).trans (ha.trans hCB)
@@ -141,11 +141,11 @@ theorem ach_opG (o : BOp) (t b c : ℕ) (σ : St (K + 1)) (Q : St (K + 1) → Pr
       (by rs) ?_))
     refine h _ (by simp [hp]) (by simp [ho]) (by rs [BOp.ap]) (fun i hi hit => ?_)
     rs
-    exact hfr _ (by simp (disch := omega) [R_eq_iff] <;> omega)
+    exact hfr _ (by simp (disch := omega) [R_eq_iff]; omega)
   | mod =>
     refine ach_seq (ach_divR _ _ _ _ _ _ _
-      (nodup_R (L := [b, b + 1, b + 2, b + 3, b + 4, b + 5, b + 6]) (by simp <;> omega)
-        (by simp <;> omega)) _ _ (ha.trans hCB) (hb.trans hCB) (by omega) ?_)
+      (nodup_R (L := [b, b + 1, b + 2, b + 3, b + 4, b + 5, b + 6]) (by simp; omega)
+        (by simp)) _ _ (ha.trans hCB) (hb.trans hCB) (by omega) ?_)
     intro σ' hp ho hq hx hfr
     have hmod : σ.reg (R K b) % σ.reg (R K (b + 1)) ≤ B :=
       (Nat.mod_le _ _).trans (ha.trans hCB)
@@ -153,7 +153,7 @@ theorem ach_opG (o : BOp) (t b c : ℕ) (σ : St (K + 1)) (Q : St (K + 1) → Pr
       (by rs) ?_))
     refine h _ (by simp [hp]) (by simp [ho]) (by rs [BOp.ap]) (fun i hi hit => ?_)
     rs
-    exact hfr _ (by simp (disch := omega) [R_eq_iff] <;> omega)
+    exact hfr _ (by simp (disch := omega) [R_eq_iff]; omega)
   | lt =>
     refine ach_seq (ach_subR _ _ (R_ne (by omega) (by omega) (by omega)) _ _ (ach_seq
       (ach_clear _ _ _ (ach_ite ?_))))
@@ -269,7 +269,7 @@ theorem ach_compE {V : ℕ} (e : Ex V) : ∀ (t b : ℕ) (σ : St (K + 1)) (Q : 
     intro σ' hp ho hv hfr
     refine h σ' (by simp [ho]) (by simp [hp, hpos]) ?_ (fun i hi hit => ?_)
     · rw [hv]; rs [Ex.eval]
-    · rw [hfr _ (by simp (disch := omega) [R_eq_iff] <;> omega)]
+    · rw [hfr _ (by simp (disch := omega) [R_eq_iff]; omega)]
       rs
   | v x =>
     intro t b σ Q hVt htb hK hcap hx hpos hmc hC hB h
@@ -293,7 +293,7 @@ theorem ach_compE {V : ℕ} (e : Ex V) : ∀ (t b : ℕ) (σ : St (K + 1)) (Q : 
     intro σ' hp ho hv hfr
     refine h σ' (by simp [ho]) (by simp [hp]) ?_ (fun i hi hit => ?_)
     · rw [hv]; rs [Ex.eval]
-    · rw [hfr _ (by simp (disch := omega) [R_eq_iff] <;> omega)]
+    · rw [hfr _ (by simp (disch := omega) [R_eq_iff]; omega)]
       rs
   | inp e ih =>
     intro t b σ Q hVt htb hK hcap hx hpos hmc hC hB h
@@ -305,7 +305,7 @@ theorem ach_compE {V : ℕ} (e : Ex V) : ∀ (t b : ℕ) (σ : St (K + 1)) (Q : 
       (by nlinarith) ?_))))
     refine h _ (by simp [ho1]) (by simp) ?_ (fun i hi hit => ?_)
     · rw [St.setReg_apply, if_pos rfl]
-      simp only [St.setReg_pos, zero_add, St.setReg_reg, Function.update_apply, if_true]
+      simp only [St.setReg_pos, zero_add]
       rw [inputSym_min, hv1]
       rfl
     · rs

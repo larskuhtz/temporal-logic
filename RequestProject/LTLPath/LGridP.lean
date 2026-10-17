@@ -55,7 +55,7 @@ lemma sArg_or_dArg {h x : ℕ} (hlen : (L.nonR h).length ≤ 2) (hx : x ∈ L.no
       · rcases le_total a x with h1 | h1
         · left; exact (Nat.max_eq_right h1)
         · right; exact (Nat.min_eq_right h1)
-  · simp at hlen <;> omega
+  · simp at hlen; omega
 
 lemma sArg_mem {h x : ℕ} (hs : L.sArg h = some x) : x ∈ L.nonR h := by
   unfold sArg at hs
@@ -138,11 +138,12 @@ lemma gateAt_uniq {b c h h' : ℕ} (e : L.GateAt M b c h) (e' : L.GateAt M b c h
   unfold col at cc cc'
   exact hL.inj h h' l l' (by omega) (by omega)
 
+omit hL in
 lemma tim_add {h : ℕ} (hl : L.live h = true) : L.tim M Cmax h + L.col M h = 10 * L.Y h + Cmax := by
   unfold tim; have := (hB h hl).2; omega
 
 lemma tim_ge {h : ℕ} (hl : L.live h = true) : 10 ≤ L.tim M Cmax h := by
-  have := tim_add hL hB hl; have := hL.ypos h hl; have := (hB h hl).2; omega
+  have := tim_add hB hl; have := hL.ypos h hl; have := (hB h hl).2; omega
 
 /-- Facts about a wire `(h, x)`. -/
 lemma wire_facts {h x : ℕ} (hl : L.live h = true) (hx : x ∈ (L.g h).args)
@@ -234,7 +235,7 @@ lemma no_conflict {h x : ℕ} (hl : L.live h = true) (hx : x ∈ (L.g h).args)
 lemma node_gate {h : ℕ} (hl : L.live h = true) :
     L.node M Cmax (L.col M h) (L.tim M Cmax h) =
       .gt (L.g h).kind (L.sArg h).isSome (L.hasR h || (L.dArg h).isSome) := by
-  have ht := tim_add hL hB hl
+  have ht := tim_add hB hl
   have hy := hL.ypos h hl
   have := (hB h hl).2
   have hex : ∃ h', L.GateAt M ((L.tim M Cmax h + L.col M h - Cmax) / 10) (L.col M h) h' :=
@@ -245,7 +246,7 @@ lemma node_gate {h : ℕ} (hl : L.live h = true) :
 
 lemma node_inrow {h : ℕ} (hl : L.live h = true) (hr : L.hasR h = true) :
     L.node M Cmax (L.col M h + 1) (L.tim M Cmax h - 1) = nD := by
-  have ht := tim_add hL hB hl
+  have ht := tim_add hB hl
   have hy := hL.ypos h hl
   have := (hB h hl).2
   have he := col_even (L := L) (M := M) h
@@ -255,7 +256,7 @@ lemma node_inrow {h : ℕ} (hl : L.live h = true) (hr : L.hasR h = true) :
 
 lemma node_inrow_S {h : ℕ} (hl : L.live h = true) (hr : L.hasR h = false) :
     L.node M Cmax (L.col M h + 1) (L.tim M Cmax h - 1) = nS := by
-  have ht := tim_add hL hB hl
+  have ht := tim_add hB hl
   have hy := hL.ypos h hl
   have := (hB h hl).2
   have he := col_even (L := L) (M := M) h
@@ -265,6 +266,7 @@ lemma node_inrow_S {h : ℕ} (hl : L.live h = true) (hr : L.hasR h = false) :
   have := gateAt_uniq hL hB hg ⟨hl, by omega, by omega⟩
   subst this; rw [hr] at hr'; cases hr'
 
+omit hB in
 /-- Nodes below band `1` copy straight. -/
 lemma node_low {c t : ℕ} (ht : 1 ≤ t) (hc : t + c < Cmax + 10) : L.node M Cmax c t = nS := by
   unfold node
@@ -285,6 +287,7 @@ lemma node_low {c t : ℕ} (ht : 1 ≤ t) (hc : t + c < Cmax + 10) : L.node M Cm
     have := hL.ypos _ hlx; omega
   · rfl
 
+omit hL hB in
 /-- Nodes of positive phase. -/
 lemma node_phase {c t : ℕ} (ht : 1 ≤ t) (hc : Cmax ≤ t + c) (hφ : (t + c - Cmax) % 10 ≠ 0) :
     L.node M Cmax c t =
@@ -298,6 +301,7 @@ lemma not_DDes_odd {b φ c : ℕ} (hp : (c + φ) % 2 = 1) : ¬ L.DDes M b φ c :
   have := col_even (L := L) (M := M) x
   omega
 
+omit hL in
 /-- Shape of the nodes above layer `0`. -/
 lemma node_shape {c t : ℕ} (ht : 1 ≤ t) :
     L.node M Cmax c t = nS ∨ (L.node M Cmax c t = nD ∧ c < Cmax) ∨
@@ -387,12 +391,12 @@ lemma wire_diag {h x : ℕ} (hl : L.live h = true) (hx : x ∈ (L.g h).args)
       Grid.gv (fun t j => L.node M Cmax (c0 + j) t) (L.tim M Cmax x + 2 * j)
         (L.col M x - j - c0) = GS.val L.g x := by
   obtain ⟨f1, f2, f3, f4⟩ := wire_facts hL hB hl hx hlx hy
-  have hta := tim_add hL hB hlx
+  have hta := tim_add hB hlx
   have hyx := hL.ypos x hlx
   have hDD : ∀ j, 1 ≤ j → j ≤ L.col M x - L.slot M h x →
       L.node M Cmax (L.col M x - j) (L.tim M Cmax x + 2 * j) = nD := by
     intro j hj1 hj2
-    rw [node_phase hL hB (by omega) (by omega) (by omega), if_pos]
+    rw [node_phase (by omega) (by omega) (by omega), if_pos]
     have e1 : (L.tim M Cmax x + 2 * j + (L.col M x - j) - Cmax) / 10 = L.Y x := by omega
     have e2 : (L.tim M Cmax x + 2 * j + (L.col M x - j) - Cmax) % 10 = j := by omega
     rw [e1, e2]
@@ -400,7 +404,7 @@ lemma wire_diag {h x : ℕ} (hl : L.live h = true) (hx : x ∈ (L.g h).args)
   have hSS : ∀ j, 1 ≤ j → j ≤ L.col M x - L.slot M h x →
       L.node M Cmax (L.col M x - j + 1) (L.tim M Cmax x + 2 * j - 1) = nS := by
     intro j hj1 hj2
-    rw [node_phase hL hB (by omega) (by omega) (by omega), if_neg]
+    rw [node_phase (by omega) (by omega) (by omega), if_neg]
     apply not_DDes_odd
     have := col_even (L := L) (M := M) x
     omega
@@ -436,7 +440,7 @@ lemma wire_run {h x : ℕ} (hl : L.live h = true) (hx : x ∈ (L.g h).args)
       Grid.gv (fun t j => L.node M Cmax (c0 + j) t)
         (L.tim M Cmax x + (L.col M x - L.slot M h x) + j) (L.slot M h x - c0) = GS.val L.g x := by
   obtain ⟨f1, f2, f3, f4⟩ := wire_facts hL hB hl hx hlx hy
-  have hta := tim_add hL hB hlx
+  have hta := tim_add hB hlx
   have hyx := hL.ypos x hlx
   intro j hj1 hj2
   induction j, hj1 using Nat.le_induction with
@@ -451,7 +455,7 @@ lemma wire_run {h x : ℕ} (hl : L.live h = true) (hx : x ∈ (L.g h).args)
   | succ j hj ih =>
     have hn : L.node M Cmax (L.slot M h x)
         (L.tim M Cmax x + (L.col M x - L.slot M h x) + j + 1) = nS := by
-      rw [node_phase hL hB (by omega) (by omega) (by omega), if_neg]
+      rw [node_phase (by omega) (by omega) (by omega), if_neg]
       have e1 : (L.tim M Cmax x + (L.col M x - L.slot M h x) + j + 1 + L.slot M h x - Cmax) / 10 =
           L.Y x := by omega
       have e2 : (L.tim M Cmax x + (L.col M x - L.slot M h x) + j + 1 + L.slot M h x - Cmax) % 10 =
@@ -471,8 +475,8 @@ lemma wire_slot_s {h x : ℕ} (hl : L.live h = true) (hx : x ∈ (L.g h).args)
   obtain ⟨f1, f2, f3, f4⟩ := wire_facts hL hB hl hx hlx hy
   have hT : L.slot M h x = L.col M h := by unfold slot; rw [if_pos hs]
   have := wire_run hL hB c0 hl hx hlx hy hc0 hsrc 9 (by omega) le_rfl
-  have hta := tim_add hL hB hlx
-  have htb := tim_add hL hB hl
+  have hta := tim_add hB hlx
+  have htb := tim_add hB hl
   rw [hT] at this
   rwa [show L.tim M Cmax x + (L.col M x - L.col M h) + 9 = L.tim M Cmax h - 1 by omega] at this
 
@@ -487,8 +491,8 @@ lemma wire_slot_d {h x : ℕ} (hl : L.live h = true) (hx : x ∈ (L.g h).args)
   obtain ⟨f1, f2, f3, f4⟩ := wire_facts hL hB hl hx hlx hy
   have hT : L.slot M h x = L.col M h + 1 := by unfold slot; rw [if_neg hs]
   have := wire_run hL hB c0 hl hx hlx hy hc0 hsrc 9 (by omega) le_rfl
-  have hta := tim_add hL hB hlx
-  have htb := tim_add hL hB hl
+  have hta := tim_add hB hlx
+  have htb := tim_add hB hl
   have hge := tim_ge hL hB hl
   rw [hT] at this
   rw [show L.tim M Cmax x + (L.col M x - (L.col M h + 1)) + 9 = L.tim M Cmax h - 2 by omega] at this
@@ -501,7 +505,7 @@ lemma front_slot_s {h x : ℕ} (hl : L.live h = true) (hc0 : c0 ≤ L.col M h)
     (hs : L.sArg h = some x) (hlx : L.live x = false) (hy : L.Y h = 1) :
     Grid.gv (fun t j => L.node M Cmax (c0 + j) t) (L.tim M Cmax h - 1) (L.col M h - c0) =
       GS.val L.g x := by
-  have htb := tim_add hL hB hl
+  have htb := tim_add hB hl
   have key : ∀ t, t ≤ L.tim M Cmax h - 1 →
       Grid.gv (fun t j => L.node M Cmax (c0 + j) t) t (L.col M h - c0) = GS.val L.g x := by
     intro t ht
@@ -517,7 +521,7 @@ lemma front_slot_s {h x : ℕ} (hl : L.live h = true) (hc0 : c0 ≤ L.col M h)
         · have := col_even (L := L) (M := M) h; omega
       · rw [decide_eq_true]; exact Or.inl ⟨h, x, ⟨hl, hy, rfl⟩, hs, hlx, hv⟩
     | succ t ih =>
-      rw [gv_S c0 hc0 (node_low hL hB (by omega) (by omega)), ih (by omega)]
+      rw [gv_S c0 hc0 (node_low hL (by omega) (by omega)), ih (by omega)]
   exact key _ le_rfl
 
 /-- The value of the diagonal slot fed by a constant. -/
@@ -525,7 +529,7 @@ lemma front_slot_d {h x : ℕ} (hl : L.live h = true) (hc0 : c0 ≤ L.col M h)
     (hd : L.dArg h = some x) (hlx : L.live x = false) (hy : L.Y h = 1) (hr : L.hasR h = false) :
     Grid.gv (fun t j => L.node M Cmax (c0 + j) t) (L.tim M Cmax h - 1) (L.col M h + 1 - c0) =
       GS.val L.g x := by
-  have htb := tim_add hL hB hl
+  have htb := tim_add hB hl
   have hge := tim_ge hL hB hl
   have he := col_even (L := L) (M := M) h
   have key : ∀ t, t ≤ L.tim M Cmax h - 2 →
@@ -544,7 +548,7 @@ lemma front_slot_d {h x : ℕ} (hl : L.live h = true) (hc0 : c0 ≤ L.col M h)
       · rw [decide_eq_true]
         exact Or.inr ⟨h, x, ⟨hl, hy, by omega⟩, by omega, hd, hlx, hv⟩
     | succ t ih =>
-      rw [gv_S c0 (by omega) (node_low hL hB (by omega) (by omega)), ih (by omega)]
+      rw [gv_S c0 (by omega) (node_low hL (by omega) (by omega)), ih (by omega)]
   have hn := node_inrow_S hL hB hl hr
   rw [show L.tim M Cmax h - 1 = L.tim M Cmax h - 2 + 1 by omega] at hn ⊢
   rw [gv_S c0 (by omega) hn, key _ le_rfl]
@@ -623,7 +627,7 @@ theorem gate_val : ∀ n h, L.tim M Cmax h = n → L.live h = true → c0 ≤ L.
   induction n using Nat.strong_induction_on with
   | _ n ih =>
   intro h hn hl hc0
-  have htb := tim_add hL hB hl
+  have htb := tim_add hB hl
   have hge := tim_ge hL hB hl
   have hy := hL.ypos h hl
   have hYh := (hB h hl).1
@@ -635,7 +639,7 @@ theorem gate_val : ∀ n h, L.tim M Cmax h = n → L.live h = true → c0 ≤ L.
       L.tim M Cmax x < L.tim M Cmax h ∧ c0 ≤ L.col M x := by
     intro x hx hlx hyx
     obtain ⟨f1, f2, -, -⟩ := wire_facts hL hB hl hx hlx hyx
-    have := tim_add hL hB hlx
+    have := tim_add hB hlx
     omega
   have hgate := node_gate hL hB hl
   rw [show L.tim M Cmax h = L.tim M Cmax h - 1 + 1 by omega, gv_gate c0 hc0
@@ -644,7 +648,7 @@ theorem gate_val : ∀ n h, L.tim M Cmax h = n → L.live h = true → c0 ≤ L.
   · intro hr x hx hxr
     obtain ⟨hlx, hyx, hXx⟩ := R_facts hL hl hx hxr
     have hcx : L.col M x = L.col M h + 2 := by unfold col; omega
-    have htx := tim_add hL hB hlx
+    have htx := tim_add hB hlx
     have hn := node_inrow hL hB hl hr
     rw [show L.tim M Cmax h - 1 = L.tim M Cmax h - 2 + 1 by omega] at hn ⊢
     rw [gv_D c0 (by omega) hn, show L.col M h + 1 + 1 = L.col M x by omega,
@@ -677,7 +681,7 @@ lemma grid_ok {h0 : ℕ} (hl0 : L.live h0 = true) :
       (L.tim M Cmax h0) := by
   have hb0 := (hB h0 hl0).2
   refine ⟨by omega, fun j _ => ⟨_, by unfold node; rw [if_pos rfl]⟩, fun t ht1 _ j hj => ?_⟩
-  rcases node_shape hL hB (c := L.col M h0 + j) ht1 with e | ⟨e, hc⟩ | ⟨h, hl, hc, e⟩
+  rcases node_shape hB (c := L.col M h0 + j) ht1 with e | ⟨e, hc⟩ | ⟨h, hl, hc, e⟩
   · exact ⟨.and, true, false, e, Or.inl rfl, Or.inl rfl, fun _ => rfl⟩
   · exact ⟨.and, false, true, e, Or.inl rfl, Or.inr rfl, fun h' => by omega⟩
   · refine ⟨_, _, _, e, hL.kind h hl, ?_, fun h' => by have := (hB h hl).2; omega⟩

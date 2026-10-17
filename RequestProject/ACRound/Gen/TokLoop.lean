@@ -60,7 +60,7 @@ lemma eval_tokCodeE {z : Word} {C : ℕ} (ρ : Fin V → ℕ) (t : Tok)
     have : 2 ^ b ≤ 16 := by
       have := Nat.pow_le_pow_right (show 0 < 2 by omega) (show b ≤ 4 by omega); simpa using this
     rw [min_eq_left (by omega : 2 ^ b ≤ C)]
-    split_ifs <;> simp <;> omega
+    split_ifs <;> simp; omega
   have hcode := CTLP.Tok.code_lt t
   rw [tokCodeE, foldr_add_eval' _ (by rw [hsum]; omega), hsum]
 

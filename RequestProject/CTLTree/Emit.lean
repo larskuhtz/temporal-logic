@@ -279,7 +279,7 @@ lemma lite_toks (c a b : LTL) : (lite c a b).toks =
   simp [lite, lor, LTL.toks]
 
 /-- Two-argument helper: the prefix of position `a + 1 + |ψ₁|` and the inner hypotheses. -/
-lemma second_arg_hyps {j₀ a n : ℕ} {ψ₁ : CTL} {R : List Tok} (hj : j₀ ≤ a)
+lemma second_arg_hyps {j₀ a n : ℕ} {ψ₁ : CTL} {R : List Tok}
     (h1 : ts.drop (a + 1) = ψ₁.toks ++ R) (H : NoSecC ts j₀ a n)
     (hn : a + 1 + ψ₁.toks.length < a + n) :
     ∀ k', j₀ ≤ k' → k' < a + 1 + ψ₁.toks.length → k' ≠ a → (tc ts k' = 10 ∨ tc ts k' = 11) →
@@ -400,7 +400,7 @@ lemma trC_emit (m : ℕ) (χ : CTL) : ∀ j₀ a R, ts.drop a = χ.toks ++ R →
       · exact H k hk1 hk hk3 ⟨by omega, by omega⟩
       · rw [show k = a by omega, hfe] at he; omega
     have hs2 : secC ts j₀ (a + 1 + ψ₁.toks.length) = secEU a := by
-      rw [secC_at hj (by omega) hfe (second_arg_hyps hj h1 H (by omega))]
+      rw [secC_at hj (by omega) hfe (second_arg_hyps h1 H (by omega))]
       simp [secAt, h10, hfe]
     rw [rng_succ', rng_add, ih1 j₀ _ _ h1 (by omega) H1, ih2 j₀ _ _ h2 (by omega) H2, hs1, hs2]
     simp [trAtC, trBodyC, h10, trC, LTL.toks, lor_toks, lite_toks, preEU, secEU, apT]
@@ -435,10 +435,10 @@ lemma trC_emit (m : ℕ) (χ : CTL) : ∀ j₀ a R, ts.drop a = χ.toks ++ R →
       · exact H k hk1 hk hk3 ⟨by omega, by omega⟩
       · rw [show k = a by omega, hfe] at he; omega
     have hs2 : secC ts j₀ (a + 1 + ψ₁.toks.length) = secAU a := by
-      rw [secC_at hj (by omega) hfe (second_arg_hyps hj h1 H (by omega))]
+      rw [secC_at hj (by omega) hfe (second_arg_hyps h1 H (by omega))]
       simp [secAt, h11, hfe]
     rw [rng_succ', rng_add, ih1 j₀ _ _ h1 (by omega) H1, ih2 j₀ _ _ h2 (by omega) H2, hs1, hs2]
-    simp [trAtC, trBodyC, h11, trC, LTL.toks, lor_toks, lite_toks, preAU, secAU, secEU, apT]
+    simp [trAtC, trBodyC, h11, trC, LTL.toks, lite_toks, preAU, secAU, secEU, apT]
 
 /-- Tokens of the translation of the formula at position `j`. -/
 def trCToks (ts : List Tok) (m j : ℕ) : List Tok := rng j (fendC ts j - j) (trAtC ts m j)

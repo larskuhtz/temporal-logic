@@ -386,7 +386,7 @@ lemma round_to_exec {cJ cI : ℕ} (hJ : cJ < M) (hI : cI < M) (rest : List ℕ) 
     (fun c => entry (tabF c cJ) ++ [.E1])
   refine ⟨tailE ++ .E2 :: tailR, ?_, ?_⟩
   · simp only [List.mem_append, List.mem_cons, tailE, tailR, List.mem_flatMap,
-      List.mem_singleton, not_or]
+      not_or]
     refine ⟨?_, by simp, ?_⟩
     · rintro ⟨c, -, h⟩
       rcases h with h | h
@@ -399,12 +399,12 @@ lemma round_to_exec {cJ cI : ℕ} (hJ : cJ < M) (hI : cI < M) (rest : List ℕ) 
   have e1 : round tabF M ++ u = ((List.range cJ).map (rowSyms tabF M)).flatMap (· ++ [.E2]) ++
       (rowSyms tabF M cJ ++ .E2 :: (tailR ++ .E3 :: u)) := by
     simp only [round, range_split hJ, List.flatMap_append, List.flatMap_cons, List.flatMap_map,
-      tailR, List.append_assoc, List.singleton_append, List.cons_append, List.nil_append]
+      tailR, List.append_assoc, List.cons_append, List.nil_append]
   have e2 : rowSyms tabF M cJ ++ .E2 :: (tailR ++ .E3 :: u) =
       ((List.range cI).map (fun c => entry (tabF c cJ))).flatMap (· ++ [.E1]) ++
       (entry (tabF cI cJ) ++ .E1 :: ((tailE ++ .E2 :: tailR) ++ .E3 :: u)) := by
     simp only [rowSyms, range_split hI, List.flatMap_append, List.flatMap_cons, List.flatMap_map,
-      tailE, List.append_assoc, List.singleton_append, List.cons_append, List.nil_append]
+      tailE, List.append_assoc, List.cons_append, List.nil_append]
   rw [e1]
   have h1 := skip_rows (enc (cI :: rest)) (rowSyms tabF M cJ ++ .E2 :: (tailR ++ .E3 :: u))
     ((List.range cJ).map (rowSyms tabF M)) (by
@@ -478,7 +478,7 @@ lemma round_short (l : List ℕ) (hl : l.length < 2) (hlt : ∀ c ∈ l, c < M) 
         (rowSyms tabF M cJ ++ .E2 :: ((List.range' (cJ + 1) (M - cJ - 1)).flatMap
           (fun c => rowSyms tabF M c ++ [.E2]) ++ .E3 :: u)) := by
       simp only [round, range_split hJ, List.flatMap_append, List.flatMap_cons, List.flatMap_map,
-        List.append_assoc, List.singleton_append, List.cons_append, List.nil_append]
+        List.append_assoc, List.cons_append, List.nil_append]
     rw [e1]
     have h1 := skip_rows (enc []) (rowSyms tabF M cJ ++ .E2 :: ((List.range' (cJ + 1) (M - cJ - 1)).flatMap
           (fun c => rowSyms tabF M c ++ [.E2]) ++ .E3 :: u)) ((List.range cJ).map (rowSyms tabF M)) (by
@@ -574,7 +574,7 @@ theorem accepts_iff (htab : ∀ cI cJ, cI < M → cJ < M → ∀ s, tabF cI cJ =
     refine (exec_script _ [a, b] []).trans ?_
     obtain ⟨Z, γ, e⟩ := enc_ne_nil [b, a]
     simp only [List.reverse_cons, List.reverse_nil, List.nil_append, List.cons_append,
-      List.singleton_append, List.append_nil]
+      List.append_nil]
     rw [e, wordOf_cons]
     have h2 := read_sym (ph := .exec) rfl .E1 Z γ (wordOf (.E3 ::
       (List.replicate T (round tabF M)).flatten))

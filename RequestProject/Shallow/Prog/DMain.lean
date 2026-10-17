@@ -90,7 +90,7 @@ lemma sp_ansP (hE : Env ts q a C ρ) (hM : ρ vNq = ts.length + 1)
 lemma ite_mul_aux {C : ℕ} (r : Bool) (Q : Prop) [Decidable Q] (hC : 1 ≤ C) :
     min ((if r = true then 1 else 0) * (if Q then 1 else 0)) C =
       if (r && decide Q) = true then 1 else 0 := by
-  cases r <;> by_cases hQ : Q <;> simp [hQ] <;> omega
+  cases r <;> by_cases hQ : Q <;> simp [hQ]; omega
 
 /-- The checks after decoding. -/
 def mainP (k : ℕ) : Pr V :=

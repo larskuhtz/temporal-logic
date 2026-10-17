@@ -11,7 +11,8 @@ There are two conditional forms in `RequestProject/Statements.lean`, both proved
   in [CD06] is not needed (see the last section).
 
 The unconditional `LTLPathChecking_mem_AC1_LogDCFL` is derived from the second form and the
-statement `StratMCVP_mem_LogDCFL`, which is not proved. The algorithm follows Kuhtz–Finkbeiner
+Barrington–Lu–Miltersen–Skyum theorem `StratMCVP_mem_LogDCFL`, which is proved in
+`RequestProject/BLMS/` following [BLMS, Section 5]. The algorithm follows Kuhtz–Finkbeiner
 [KF12, Sections 3–5] (monotone circuits, construction of the circuit, parallel tree
 contraction [ADKP89]), adapted to lasso paths. File names below refer to
 `RequestProject/LTLPath/` unless stated otherwise.

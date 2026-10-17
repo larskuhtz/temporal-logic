@@ -200,9 +200,9 @@ theorem eval_eq_ev {w : Word} {C : ℕ} : ∀ (e : E) (d : ℕ) (ρ δ : ℕ →
     simp only [E.wf, Bool.and_eq_true] at hw
     simp only [E.dg] at hC ⊢
     have hda : a.dg d δ ≤ dgOp o (a.dg d δ) (b.dg d δ) := by
-      cases o <;> simp [dgOp] <;> omega
+      cases o <;> simp [dgOp]; omega
     have hdb : b.dg d δ ≤ dgOp o (a.dg d δ) (b.dg d δ) := by
-      cases o <;> simp [dgOp] <;> omega
+      cases o <;> simp [dgOp]; omega
     obtain ⟨a1, a2⟩ := iha d ρ δ hw.1 hρ ((pow_mono hX hda).trans hC)
     obtain ⟨b1, b2⟩ := ihb d ρ δ hw.2 hρ ((pow_mono hX hdb).trans hC)
     simp only [eval, ev, a1, b1]

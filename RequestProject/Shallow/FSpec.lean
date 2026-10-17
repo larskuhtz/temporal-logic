@@ -269,7 +269,7 @@ start of its second argument strictly inside the span `(a, a + n)`. -/
 def NoSec (ts : List Tok) (j₀ a n : ℕ) : Prop :=
   ∀ k, j₀ ≤ k → k < a → tc ts k = 10 → ¬ (a < fend ts (k + 1) ∧ fend ts (k + 1) < a + n)
 
-lemma secU_child {j₀ a n : ℕ} (hj : j₀ ≤ a) (H : NoSec ts j₀ a n) (hn : 1 < n)
+lemma secU_child {j₀ a n : ℕ} (H : NoSec ts j₀ a n) (hn : 1 < n)
     (h10 : tc ts a ≠ 10) : secU ts j₀ (a + 1) = false := by
   apply secU_false
   intro k hk1 hk2 hk3
@@ -328,7 +328,7 @@ lemma tr_emit (m : ℕ) (χ : CTLStar) : ∀ j₀ a R, ts.drop a = χ.toks ++ R 
     have hl := CTLStar.toks_length_pos ψ
     simp only [CTLStar.toks, List.length_cons] at H ⊢
     rw [rng_succ', ih j₀ _ _ (drop_succ_of_drop h') (by omega) (by simpa using NoSec_child H h10),
-      secU_child hj H (by omega) h10]
+      secU_child H (by omega) h10]
     simp [trAt, trBody, tc_of_drop h', Tok.code, trP, LTL.toks]
   | and ψ₁ ψ₂ ih1 ih2 =>
     intro j₀ a R h hj H
@@ -359,7 +359,7 @@ lemma tr_emit (m : ℕ) (χ : CTLStar) : ∀ j₀ a R, ts.drop a = χ.toks ++ R 
         · exact h10 hk3
         · have := U_inside ψ₁ _ _ h1 k (by omega) (by omega) hk3; omega
     rw [rng_succ', rng_add, ih1 j₀ _ _ h1 (by omega) H1, ih2 j₀ _ _ h2 (by omega) H2, hs2,
-      secU_child hj H (by omega) h10]
+      secU_child H (by omega) h10]
     simp [trAt, trBody, tc_of_drop h', Tok.code, trP, LTL.toks]
   | X ψ ih =>
     intro j₀ a R h hj H
@@ -368,7 +368,7 @@ lemma tr_emit (m : ℕ) (χ : CTLStar) : ∀ j₀ a R, ts.drop a = χ.toks ++ R 
     have hl := CTLStar.toks_length_pos ψ
     simp only [CTLStar.toks, List.length_cons] at H ⊢
     rw [rng_succ', ih j₀ _ _ (drop_succ_of_drop h') (by omega) (by simpa using NoSec_child H h10),
-      secU_child hj H (by omega) h10]
+      secU_child H (by omega) h10]
     simp [trAt, trBody, tc_of_drop h', Tok.code, trP, LTL.toks]
   | U ψ₁ ψ₂ ih1 ih2 =>
     intro j₀ a R h hj H
@@ -411,7 +411,7 @@ lemma tr_emit (m : ℕ) (χ : CTLStar) : ∀ j₀ a R, ts.drop a = χ.toks ++ R 
     have hl := CTLStar.toks_length_pos ψ
     simp only [CTLStar.toks, List.length_cons] at H ⊢
     rw [rng_succ', ih j₀ _ _ (drop_succ_of_drop h') (by omega) (by simpa using NoSec_child H h10),
-      secU_child hj H (by omega) h10]
+      secU_child H (by omega) h10]
     simp [trAt, trBody, tc_of_drop h', Tok.code, trP, LTL.toks]
 
 /-- Tokens of the translation of the formula at position `j`. -/

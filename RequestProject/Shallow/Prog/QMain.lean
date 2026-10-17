@@ -114,7 +114,7 @@ lemma sp_proP (k : ℕ) (hq : q ≤ a.length)
   have hE8 : Env ts q a C ρ8 := hE5.congr (g8 _ (by decide) (by decide) (by decide))
     (g8 _ (by decide) (by decide) (by decide))
   -- root
-  refine sp_seqE (o2 := []) ((sp_fendP hE8 (.c 1) (by simp only [eval_c]; omega)).frame.mono (by decide)
+  refine sp_seqE (o2 := []) ((sp_fendP hE8 (.c 1)).frame.mono (by decide)
     (fun _ _ h => h)) (fun ρ9 _ h9 => ?_) rfl
   simp only [eval_c, min_eq_left (show 1 ≤ C by omega)] at h9
   have hfe : fend ts 1 ≤ ts.length + 1 := fend_le_succ ts (by omega)
@@ -152,7 +152,7 @@ lemma sp_proP (k : ℕ) (hq : q ≤ a.length)
   · rw [e _ (by decide) (by decide) (by decide) (by decide), g10 _ (by decide) (by decide)]
     simp (disch := decide) [ρ8, ρ7, Function.update_of_ne]
   · rw [e _ (by decide) (by decide) (by decide) (by decide), g10 _ (by decide) (by decide)]
-    simp (disch := decide) [ρ8, Function.update_of_ne]
+    simp (disch := decide) [ρ8]
   · rw [hr.2 _ (by decide), h11.2 _ (by decide)]
     simp [ρ10]
   · rw [hr.1, h11.1]

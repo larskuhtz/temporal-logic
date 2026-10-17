@@ -60,7 +60,7 @@ lemma copyGate_ok (hwf : ∀ ℓ ≤ P.L, (P.CB ℓ).WellFormed ℓ) (r q ℓ v 
   unfold copyGate GateOk
   revert hk
   rcases hg : (P.CB ℓ)[v].kind with k | c | _ | _ | _ | _ <;> intro hk <;>
-    simp only [hg] at hk ⊢
+    simp only at hk ⊢
   · refine ⟨fun j hj => ?_, trivial⟩
     simp only [List.mem_singleton] at hj
     subst hj; omega

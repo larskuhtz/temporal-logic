@@ -42,11 +42,11 @@ lemma toks_eq (g : Gate) : ∃ t, g.toks = Tok.tag t :: g.toks.tail ∧
     ∀ t' ∈ g.toks.tail, isTag t' = false := by
   have hargs : ∀ t' ∈ Tok.lpar :: (g.args.flatMap natToks ++ [Tok.rpar]), isTag t' = false := by
     intro t' ht
-    simp only [List.mem_cons, List.mem_append, List.mem_flatMap, List.mem_singleton] at ht
+    simp only [List.mem_cons, List.mem_append, List.mem_flatMap] at ht
     rcases ht with rfl | ⟨a, -, ht⟩ | ht
     · rfl
     · exact natToks_noTag a t' ht
-    · simp only [List.mem_cons, List.not_mem_nil, or_false] at ht; subst ht; rfl
+    · simp only [List.not_mem_nil, or_false] at ht; subst ht; rfl
   unfold Gate.toks
   rcases hk : g.kind with k | b | _ | _ | _ | _
   · refine ⟨0, rfl, ?_⟩
@@ -450,7 +450,7 @@ lemma natToks_head_le (a : ℕ) : ((natToks a)[0]'(by simp [natToks])).code ≤ 
 lemma natToks_length (a : ℕ) : (natToks a).length = (Nat.bits a).length + 1 := by
   simp [natToks]
 
-lemma parse_ok (hW : C.WellFormed 0) (hM : C.MonotoneFanin2) {i : ℕ} (hi : i < C.length) :
+lemma parse_ok (hM : C.MonotoneFanin2) {i : ℕ} (hi : i < C.length) :
     pLo C i = Conc.lo C i ∧ pHi C i = Conc.hi C i := by
   have hA := At_gate hi
   have hk := kindConst_iff hi

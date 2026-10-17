@@ -173,31 +173,30 @@ lemma run_stepP {z : Word} {C : ℕ} (ρ : Fin V → ℕ) (s : CS) (hs : Enc ρ 
       · obtain ⟨ρ', hr, hf⟩ := emitNat_run_eq (z := z) ex ey ei (by decide) (by omega)
           (Function.update ρ ex (min (ρ vb0 + ρ num) C))
         simp only [hr]
-        simp [Enc, hf, h1, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, ex, ey, ei,
-          LS.encodeToks_append, LS.encodeToks_cons]
-      · simp [Enc, h1, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, LS.encodeToks_append, LS.encodeToks_cons]
+        simp [Enc, hf, h1, h2, h3, h5, h6, md, orc, num, pw, inp, gc, ex, ey, ei]
+      · simp [Enc, h1, h2, h3, h6, md, orc, num, pw, inp, gc]
     simp only [c3, if_false]
     by_cases c4 : ρ vc = 3
     · simp only [c4, if_true, ne_eq, one_ne_zero, not_false_eq_true]
-      cases m <;> cases o <;> simp [Enc, h1, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, LS.encodeToks_append, LS.encodeToks_cons]
+      cases m <;> cases o <;> simp [Enc, h1, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, LS.encodeToks_cons]
     simp only [c4, if_false]
     by_cases c5 : ρ vc = 4
     · simp only [c5, if_true, ne_eq, one_ne_zero, not_false_eq_true]
       cases m
-      · simp [Enc, h1, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, LS.encodeToks_append, LS.encodeToks_cons]
+      · simp [Enc, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, LS.encodeToks_cons]
       · obtain ⟨ρ', hr, hf⟩ := emitNat_run_eq (z := z) ex ey ei (by decide) (by omega)
           (Function.update ρ ex (min (ρ vg0 + ρ inp) C))
-        simp only [ne_eq, one_ne_zero, not_false_eq_true, if_true, hr]
-        simp [Enc, hf, h1, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, ex, ey, ei,
+        simp only [one_ne_zero, not_false_eq_true, if_true, hr]
+        simp [Enc, hf, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, ex, ey, ei,
           LS.encodeToks_append, LS.encodeToks_cons]
     simp only [c5, if_false]
     by_cases c6 : ρ vc = 5
-    · simp [c6, Enc, h1, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc]
+    · simp [c6, Enc, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc]
     simp only [c6, if_false]
     rw [run_emitCode _ _ (by omega) (by
       simp only [Function.update_of_ne (show vc ≠ md by decide),
         Function.update_of_ne (show vc ≠ orc by decide)]; omega)]
-    simp [Enc, h1, h2, h3, h4, h5, h6, md, orc, num, pw, inp, gc, vc]
+    simp [Enc, h3, h4, h5, h6, md, orc, num, pw, inp, gc, vc]
 
 end GenP
 

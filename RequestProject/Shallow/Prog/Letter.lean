@@ -101,8 +101,7 @@ lemma sp_nxtP (hE : Env ts q a C ρ) (hu : ρ vU ≤ ts.length) :
   · refine sp_ite_pos (by simp [h1, hl]) (sp_set (by decide) ?_)
     simp [nxt, hl, hU1]
   · refine sp_ite_neg (by simp [h1, hl]) ?_
-    refine sp_seqE (o2 := []) ((sp_tendP hE1 (.bin .add (.v vU) (.c 1))
-      (by simp only [eval_bin, ap_add, eval_v, eval_c, hU1]; omega)).mono (by decide)
+    refine sp_seqE (o2 := []) ((sp_tendP hE1 (.bin .add (.v vU) (.c 1))).mono (by decide)
       (fun _ _ h => h)) (fun ρ2 f2 h2 => ?_) rfl
     have hE2 := hE1.of_frame f2 (by decide) (by decide)
     have hU2 : ρ2 vU = ρ vU := (f2 _ (by decide)).trans hU1
@@ -301,7 +300,7 @@ lemma sp_labGP (hE : Env ts q a C ρ) (hu : ρ vU ≤ ts.length) :
       ρ vU + 1 := by
     simp only [eval_bin, ap_add, eval_v, eval_c]; simp (disch := omega) only [min_eq_left]
   refine sp_seqE (o2 := encodeToks (labG ts (ρ vM) (ρ vU)))
-    ((sp_tendP hE _ (by rw [hev]; omega)).mono (by decide) (fun _ _ h => h))
+    ((sp_tendP hE _).mono (by decide) (fun _ _ h => h))
     (fun ρ1 f1 h1 => ?_) (by simp)
   rw [hev] at h1
   have hte := tend_le_succ ts (show ρ vU + 1 ≤ ts.length + 1 by omega)
@@ -402,7 +401,7 @@ lemma sp_lettersP (hE : Env ts q a C ρ) (hM : ρ vNq = ts.length + 1)
   have hE2 := hE.of_frame f2' (by decide) (by decide)
   have hU2 : ρ2 vU = ρ vU := f2' _ (by decide)
   refine sp_seqE (o2 := encodeToks (rng (ρ vU) (tend ts (ρ vU) - ρ vU) L))
-    ((sp_tendP hE2 (.v vU) (by simp only [eval_v]; omega)).mono (by decide) (fun _ _ h => h))
+    ((sp_tendP hE2 (.v vU)).mono (by decide) (fun _ _ h => h))
     (fun ρ3 f3 h3 => ?_) (by simp)
   simp only [eval_v, hU2] at h3
   have hU3 : ρ3 vU = ρ vU := (f3 _ (by decide)).trans hU2

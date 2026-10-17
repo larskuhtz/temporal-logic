@@ -34,7 +34,7 @@ variable {ts}
 
 theorem formOK_sound (h : FormOK ts) : ∃ φ : LTL, ts.drop 1 = φ.toks ++ ts.drop (tF ts) := by
   obtain ⟨h0, hn, h4, he, hR⟩ := h
-  obtain ⟨fs, hl, hd⟩ := form_parse hn h4 he (fun j h1 h2 => hR j h2 h1) _ 1 1 rfl le_rfl le_rfl rfl
+  obtain ⟨fs, hl, hd⟩ := form_parse hn he (fun j h1 h2 => hR j h2 h1) _ 1 1 rfl le_rfl le_rfl rfl
     (by simp [h0])
   obtain ⟨φ, rfl⟩ : ∃ φ, fs = [φ] := by
     rcases fs with _ | ⟨φ, _ | ⟨ψ, fs⟩⟩

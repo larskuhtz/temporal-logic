@@ -81,7 +81,7 @@ lemma Env.tok (hE : Env C w K) (ρ : Var → ℕ) (p : Ex V) (hp : p.eval w K ρ
     (tokE p).eval w K ρ = tc C (p.eval w K ρ) := by
   rw [eval_tokE (gts C) hE.hw ρ p hp hE.lenK, tc_eq hp]
 
-lemma Env.n_le (hE : Env C w K) : C.length ≤ (gts C).length := by
+lemma length_le_gts : C.length ≤ (gts C).length := by
   rw [gts_length]
   have : ∀ i ≤ C.length, i ≤ offs C i := by
     intro i
@@ -285,8 +285,8 @@ lemma argsP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ)
   obtain ⟨hW, hM, -⟩ := hC
   have hK := hE.lenK
   have hg := hE.gts_le
-  have hnK : C.length ≤ K := by have := hE.n_le; have := hE.gts_le; omega
-  obtain ⟨hlo, hhi⟩ := parse_ok hW hM hi
+  have hnK : C.length ≤ K := by have := length_le_gts (C := C); have := hE.gts_le; omega
+  obtain ⟨hlo, hhi⟩ := parse_ok hM hi
   have hlon := lo_lt_n hW hi
   have hhin := hi_lt_n hW hi
   have he1 := e1_lt hM hi hc
@@ -344,7 +344,7 @@ lemma gateP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ)
     GateOut C (ρ vGi) (st w K gateP ρ) := by
   have hK := hE.lenK
   have hg := hE.gts_le
-  have hnK : C.length ≤ K := by have := hE.n_le; have := hE.gts_le; omega
+  have hnK : C.length ≤ K := by have := length_le_gts (C := C); have := hE.gts_le; omega
   unfold gateP
   rw [st_ite]
   simp only [eval_bin, ap_lt, eval_v, hNG]
@@ -397,7 +397,7 @@ lemma gateP_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ)
     simp only [eval_v, h5C]
     by_cases hc : pIsC C i = true
     · rw [if_pos (by simp [hc])]
-      obtain ⟨hlo, hhi⟩ := parse_ok hC.1 hC.2.1 hi
+      obtain ⟨hlo, hhi⟩ := parse_ok hC.2.1 hi
       simp only [st_seq, st_set, eval_c, min_eq_left (Nat.zero_le K)]
       refine ⟨hA _ (by simp (config := {decide := true}) [h5A]), ?_, ?_, ?_,
         hT _ (by simp (config := {decide := true}) [h5T])⟩

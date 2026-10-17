@@ -54,7 +54,7 @@ lemma run_labCopyP {ts : List Tok} {q : ℕ} {a : List Bool} {ρ : Fin V → ℕ
   have hev : (Ex.bin .add (.v vY) (.c 1) : Ex V).eval (pack (encodeToks ts) q a) C ρ = ρ vY + 1 := by
     simp only [eval_bin, ap_add, eval_v, eval_c]
     simp (disch := omega) only [min_eq_left]
-  obtain ⟨f1, f2⟩ := run_tendP hE (.bin .add (.v vY) (.c 1)) (by rw [hev]; omega)
+  obtain ⟨f1, f2⟩ := run_tendP hE (.bin .add (.v vY) (.c 1))
   rw [hev] at f1
   set ρ1 := ((tendP (.bin .add (.v vY) (.c 1))).run (pack (encodeToks ts) q a) C ρ).1
   have r1 : (tendP (.bin .add (.v vY) (.c 1))).run (pack (encodeToks ts) q a) C ρ = (ρ1, []) :=
@@ -139,7 +139,7 @@ lemma run_nodeP {ts : List Tok} {q : ℕ} {a : List Bool} {ρ : Fin V → ℕ}
       min_eq_left (show 3 ≤ C by omega)]
     rw [eval_tokE ts q a C ρ2 _ hE2.hq hE2.hC hE2.hN (by rw [hY1]; omega), hY1]
     simp only [isNode, Bool.and_eq_true, beq_iff_eq]
-    by_cases h1 : tc ts pv = 3 <;> by_cases h2 : tc ts (pv + 1) = 3 <;> simp [h1, h2] <;> omega
+    by_cases h1 : tc ts pv = 3 <;> by_cases h2 : tc ts (pv + 1) = 3 <;> simp [h1, h2]; omega
   have hcond : (Ex.bin .mul isNodeE (.bin .eq (.v vLf) (.c (if lf then 1 else 0))) : Ex V).eval
       (pack (encodeToks ts) q a) C ρ2 =
         if (isNode ts pv && (isLeaf ts pv == lf)) then 1 else 0 := by
@@ -173,7 +173,7 @@ lemma run_labLoopP {ts : List Tok} {q : ℕ} {a : List Bool} {ρ : Fin V → ℕ
         (ρ', encodeToks (rng (ρ vU) (tend ts (ρ vU) - ρ vU) (labAt ts lf))) ∧
       ∀ v, v ∉ labLoopW → ρ' v = ρ v := by
   have hC := hE.len_le
-  obtain ⟨f1, f2⟩ := run_tendP hE (.v vU) (by simp; omega)
+  obtain ⟨f1, f2⟩ := run_tendP hE (.v vU)
   set ρ1 := ((tendP (.v vU)).run (pack (encodeToks ts) q a) C ρ).1
   have r1 : (tendP (.v vU)).run (pack (encodeToks ts) q a) C ρ = (ρ1, []) := Prod.ext rfl f2
   have g1 : ∀ v, v ∉ labLoopW → ρ1 v = ρ v := fun v hv =>

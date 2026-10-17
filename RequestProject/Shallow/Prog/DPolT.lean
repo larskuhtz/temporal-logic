@@ -109,7 +109,7 @@ lemma sp_polTP (hE : Env ts q a C ρ) (p : Ex V)
         rw [eval_tokE ts q a C r _ hE.hq hE.hC hEr.hN (by simp; omega)]; simp
       have ht1 : (tokE (.bin .add (.v tP) (.c 1))).eval x C r = tc ts (r tP + 1) := by
         rw [eval_tokE ts q a C r _ hE.hq hE.hC hEr.hN (by simp)]
-        simp (disch := omega) []
+        simp (disch := omega)
       by_cases h4 : tc ts (r tP) = 4
       · refine sp_ite_pos (by simp [ht, h4, min_eq_left (show 4 ≤ C by omega)]) ?_
         rw [if_pos h4] at hI
@@ -145,9 +145,9 @@ lemma sp_polTP (hE : Env ts q a C ρ) (p : Ex V)
                 simp [hc', e3]
             refine sp_set2 (by decide) (by decide) (Or.inr ⟨?_, ⟨?_, ?_, ?_, ?_⟩, ?_⟩)
             · simp (disch := first | decide | omega) [Function.update_of_ne, hd]
-            · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
-            · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
-            · simp (disch := first | decide | omega) [Function.update_of_ne] <;> omega
+            · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
+            · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
+            · simp (disch := first | decide | omega) [Function.update_of_ne]; omega
             · simp (disch := first | decide | omega) [Function.update_of_ne, hI']
             · simp (disch := first | decide | omega) [Function.update_of_ne]
       · refine sp_ite_neg (by simp [ht, h4, min_eq_left (show 4 ≤ C by omega)]) ?_
@@ -160,7 +160,7 @@ lemma sp_polTP (hE : Env ts q a C ρ) (p : Ex V)
           · have hlt1 : r tP + 1 < ts.length := lt_of_tc_ne (by omega)
             refine sp_ite_pos (by simp [ht1, h3', min_eq_left (show 3 ≤ C by omega)]) ?_
             refine sp_seqE (o1 := []) (o2 := []) ((sp_labSufP hEr (.bin .add (.v tP) (.c 2))
-              (by simp (disch := omega) []; omega)).frame.mono
+              (by simp (disch := omega); omega)).frame.mono
               (W' := polTW) (by decide) (fun _ _ h => h)) (fun r1 _ h1 => ?_) rfl
             obtain ⟨h1R, h1f⟩ := h1
             have hE1 : Env ts q a C r1 := hEr.of_frame h1f (by decide) (by decide)
@@ -168,8 +168,7 @@ lemma sp_polTP (hE : Env ts q a C ρ) (p : Ex V)
             have h1C : r1 tC = r tC := h1f tC (by decide)
             have h1D : r1 tD = r tD := h1f tD (by decide)
             simp (disch := omega) only [eval_bin, ap_add, eval_v, eval_c, min_eq_left] at h1R
-            refine sp_seqE (o1 := []) (o2 := []) ((sp_tendP hE1 (.bin .add (.v tP) (.c 1))
-              (by simp (disch := omega) [h1P]; omega)).frame.mono
+            refine sp_seqE (o1 := []) (o2 := []) ((sp_tendP hE1 (.bin .add (.v tP) (.c 1))).frame.mono
               (W' := polTW) (by decide) (fun _ _ h => h)) (fun r2 _ h2 => ?_) rfl
             obtain ⟨h2R, h2f⟩ := h2
             simp (disch := omega) only [eval_bin, ap_add, eval_v, eval_c, min_eq_left, h1P] at h2R

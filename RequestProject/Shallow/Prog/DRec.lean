@@ -71,7 +71,7 @@ lemma sp_recP (hE : Env ts q a C ρ) (hL1 : 1 ≤ ts.length) (hb : ρ vD + 2 ≤
   obtain ⟨h1R, h1f⟩ := h1
   have hE1 : Env ts q a C r1 := hE.of_frame h1f (by decide) (by decide)
   simp only [eval_c, min_eq_left (show 1 ≤ C by omega)] at h1R
-  refine sp_seqE (o1 := []) (o2 := []) ((sp_fendP hE1 (.c 1) (by simp <;> omega)).frame.mono
+  refine sp_seqE (o1 := []) (o2 := []) ((sp_fendP hE1 (.c 1)).frame.mono
     (W' := recW) (by decide) (fun _ _ h => h)) (fun r2 _ h2 => ?_) rfl
   obtain ⟨h2R, h2f⟩ := h2
   simp only [eval_c, min_eq_left (show 1 ≤ C by omega)] at h2R
@@ -108,7 +108,7 @@ lemma sp_recP (hE : Env ts q a C ρ) (hL1 : 1 ≤ ts.length) (hb : ρ vD + 2 ≤
     simp (disch := omega) only [min_eq_left]
     by_cases e1 : tc ts 0 = 3 <;> by_cases e2 : polF ts 1 1 <;> by_cases e3 : tc ts f = 4 <;>
       by_cases e4 : tc ts (f + 1) = 3 <;> by_cases e5 : tc ts (f + 2) = 3 <;>
-      simp [e1, e2, e3, e4, e5] <;> omega
+      simp [e1, e2, e3, e4, e5]; omega
   rw [recog_eq, ← hf]
   by_cases hc : (tc ts 0 == 3 && polF ts 1 1 && tc ts f == 4 && tc ts (f + 1) == 3 &&
       tc ts (f + 2) == 3) = true
@@ -123,8 +123,7 @@ lemma sp_recP (hE : Env ts q a C ρ) (hL1 : 1 ≤ ts.length) (hb : ρ vD + 2 ≤
     simp (disch := omega) only [eval_bin, ap_add, eval_v, eval_c, min_eq_left, h3F] at h4R
     have hE4 : Env ts q a C r4 := hE3.of_frame h4f (by decide) (by decide)
     have h4F : r4 vFE = f := (h4f vFE (by decide)).trans h3F
-    refine sp_seqE (o1 := []) (o2 := []) ((sp_tendP hE4 (.bin .add (.v vFE) (.c 2))
-      (by simp (disch := omega) [h4F]; omega)).frame.mono
+    refine sp_seqE (o1 := []) (o2 := []) ((sp_tendP hE4 (.bin .add (.v vFE) (.c 2))).frame.mono
       (W' := recW) (by decide) (fun _ _ h => h)) (fun r5 _ h5 => ?_) rfl
     obtain ⟨h5R, h5f⟩ := h5
     simp (disch := omega) only [eval_bin, ap_add, eval_v, eval_c, min_eq_left, h4F] at h5R
@@ -153,8 +152,7 @@ lemma sp_recP (hE : Env ts q a C ρ) (hL1 : 1 ≤ ts.length) (hb : ρ vD + 2 ≤
       have hE7 : Env ts q a C r7 := hE6.of_frame h7f (by decide) (by decide)
       have h7F : r7 vFE = f := by
         rw [h7f vFE (by decide)]; simp (disch := decide) [r6, Function.update_of_ne, h5F]
-      refine sp_seqE (o1 := []) (o2 := []) ((sp_tendP hE7 (.bin .add (.v vFE) (.c 1))
-        (by simp (disch := omega) [h7F]; omega)).frame.mono
+      refine sp_seqE (o1 := []) (o2 := []) ((sp_tendP hE7 (.bin .add (.v vFE) (.c 1))).frame.mono
         (W' := recW) (by decide) (fun _ _ h => h)) (fun r8 _ h8 => ?_) rfl
       obtain ⟨h8R, h8f⟩ := h8
       simp (disch := omega) only [eval_bin, ap_add, eval_v, eval_c, min_eq_left, h7F] at h8R
@@ -166,7 +164,7 @@ lemma sp_recP (hE : Env ts q a C ρ) (hL1 : 1 ≤ ts.length) (hb : ρ vD + 2 ≤
         simp at hc
         simp only [hc, hl, beq_self_eq_true, Bool.true_and, Bool.and_true]
         by_cases e1 : polT ts b (tend ts (f + 2)) 1 = true <;>
-          by_cases e2 : tend ts (f + 1) = ts.length <;> simp [e1, e2] <;> omega
+          by_cases e2 : tend ts (f + 1) = ts.length <;> simp [e1, e2]; omega
       · rw [Function.update_of_ne (by decide), h8f vFE (by decide), h7F]
     · rw [Bool.not_eq_true] at hl
       refine sp_ite_neg (by simp (disch := decide) [r6, Function.update_of_ne, h5lR, hl])

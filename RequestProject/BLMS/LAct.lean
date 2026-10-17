@@ -198,7 +198,7 @@ lemma decodeP_spec (hE : Env C w K) (ρ : Var → ℕ) (hG : Glob C ρ) :
 lemma isVL_eval {ρ : Var → ℕ} {a b : Var} (hK : 1 ≤ K) :
     (isVL a b).eval w K ρ ≠ 0 ↔ (ρ a, ρ b) = LC.vL := by
   rw [isVL, eval_andB eval_eqB eval_eqB hK, toNat_ne_zero]
-  simp [LC.vL, min_eq_left (Nat.zero_le K)]
+  simp [LC.vL]
 
 lemma actCls_spec (hE : Env C w K) (hC : StratMCVPInstance C) (ρ : Var → ℕ) (hG : Glob C ρ) :
     st w K actCls ρ vAc = outCode ((toLC C).classify (ρ vIa, ρ vIb) (ρ vJa, ρ vJb)) := by
