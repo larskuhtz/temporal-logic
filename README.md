@@ -1,12 +1,3 @@
-This project was edited by [Aristotle](https://aristotle.harmonic.fun).
-
-To cite Aristotle:
-- Tag @Aristotle-Harmonic on GitHub PRs/issues
-- Add as co-author to commits:
-```
-Co-authored-by: Aristotle (Harmonic) <aristotle-harmonic@harmonic.fun>
-```
-
 # Parallel complexity of path and tree checking for temporal logics, in Lean 4
 
 This project formalises, in Lean 4 with Mathlib, results on the complexity of **path checking**
